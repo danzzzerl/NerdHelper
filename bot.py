@@ -260,7 +260,7 @@ def main() -> None:
 
 
   updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
-  updater.bot.setWebhook('https://url_from_heroku' + TOKEN)
+  updater.bot.setWebhook('https://nerdhelperr.herokuapp.com/' + TOKEN)
   updater.idle()
   
 
