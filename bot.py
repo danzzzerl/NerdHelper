@@ -3,6 +3,9 @@ import os
 from telegram import *
 from telegram.ext import *
 
+PORT = int(os.environ.get('PORT', 5000))
+
+# enable logging
 logging.basicConfig(
     format='%(asctime)s - %(name)s %(levelname)s - %(message)s', level=logging.INFO
 )
@@ -11,7 +14,6 @@ logger = logging.getLogger(__name__)
 
 # global variables
 TOKEN = '5362228092:AAHZs65AIhRe9osKuQPPQRuSzCAsjBdjcD8'
-PORT = int(os.environ.get('PORT', 13978))
 todo_dictionary = {"default": "To-do List:"}
 chatid = 0
 task_name = ''
@@ -259,8 +261,10 @@ def main() -> None:
   dispatcher.add_handler(CallbackQueryHandler(queryHandler))
 
 
-  updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
-  updater.bot.setWebhook('https://nerdhelperr.herokuapp.com/' + TOKEN)
+  updater.start_webhook(listen="0.0.0.0", 
+  port=int(PORT), 
+  url_path=TOKEN, 
+  webhook_url='https://vast-waters-13310.herokuapp.com/' + TOKEN)
   updater.idle()
   
 
