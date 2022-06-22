@@ -264,7 +264,7 @@ def main() -> None:
   updater.start_webhook(listen="0.0.0.0", 
   port=int(PORT), 
   url_path=TOKEN, 
-  webhook_url='https://vast-waters-13310.herokuapp.com/' + TOKEN)
+  webhook_url='https://nerdhelperr.herokuapp.com/' + TOKEN)
   updater.idle()
   
 
