@@ -2,6 +2,7 @@ import logging
 import os
 from telegram import *
 from telegram.ext import *
+import datetime
 
 PORT = int(os.environ.get('PORT', 5000))
 
@@ -17,6 +18,7 @@ TOKEN = '5362228092:AAHZs65AIhRe9osKuQPPQRuSzCAsjBdjcD8'
 todo_dictionary = {"default": "To-do List:"}
 chatid = 0
 task_name = ''
+pomodoro = 25*60
 
 def start_command(update: Update, _: CallbackContext) -> None:
     user = update.message.from_user
@@ -36,6 +38,7 @@ def help_command(update: Update, _:CallbackContext) -> None:
         '/donetask followed by the number of that task on the list to remove that task.\n' + 
         '/list to view your current to-do list\n' + 
         '/newlist to delete your current list and start a new one\n' +
+        '/startpomo to start a pomodoro timer of 25mins and will remind you time left with intervals of 5mins\n'
         '/help to look at the bot commands again!'
   )
 
@@ -111,6 +114,21 @@ def done_task(update: Update, _:CallbackContext) -> None:
 def create_new(update: Update, context:CallbackContext):
   buttons = [[InlineKeyboardButton("Yes 👍🏽", callback_data="yes")], [InlineKeyboardButton("No 👎🏽", callback_data="no")]]
   context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(buttons), text="Are you sure?")
+
+
+def pomodoro_timer(update: Update, context: CallbackContext):
+  global pomodoro
+  timeleft = pomodoro
+  context.bot.send_message(chat_id=update.effective_chat.id, text=f'Pomodoro timer of 25minutes started!')
+  while timeleft:
+    time.sleep(300)
+    timeleft -= 300
+    minutes = timeleft // 60
+    context.bot.send_message(chat_id=update.effective_chat.id, text=f'{minutes} mins left! Keep pushing!!!')
+
+  # when the pomodoro timer ends
+  context.bot.send_message(chat_id=update.effective_chat.id,
+                           text=f'Pomodoro timer of 25 minutes have finished! /startpomo to start another cycle of 25mins!')
 
 
 def queryHandler(update: Update, context:CallbackContext):
@@ -245,6 +263,11 @@ def queryHandler(update: Update, context:CallbackContext):
     for i in range (1, len(todo_list)):
       str += f'{i}. ' + f'{todo_list[i][1]}\n'
     context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
+
+
+
+
+
     
 
 def main() -> None:
@@ -258,11 +281,14 @@ def main() -> None:
   dispatcher.add_handler(CommandHandler('addtask', add_task))
   dispatcher.add_handler(CommandHandler('donetask', done_task))
   dispatcher.add_handler(CommandHandler('newlist', create_new))
+  dispatcher.add_handler(CommandHandler('startpomo', pomodoro_timer))
+  dispatcher.add_handler(CommandHandler('reminder', reminder_command))
+
   dispatcher.add_handler(CallbackQueryHandler(queryHandler))
 
 
   updater.start_webhook(listen="0.0.0.0", 
-  port=int(PORT), 
+  port=int(PORT),
   url_path=TOKEN, 
   webhook_url='https://nerdhelperr.herokuapp.com/' + TOKEN)
   updater.idle()
