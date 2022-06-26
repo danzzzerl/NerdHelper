@@ -2,7 +2,7 @@ import logging
 import os
 from telegram import *
 from telegram.ext import *
-import datetime
+import time
 
 PORT = int(os.environ.get('PORT', 5000))
 
@@ -282,7 +282,6 @@ def main() -> None:
   dispatcher.add_handler(CommandHandler('donetask', done_task))
   dispatcher.add_handler(CommandHandler('newlist', create_new))
   dispatcher.add_handler(CommandHandler('startpomo', pomodoro_timer))
-  dispatcher.add_handler(CommandHandler('reminder', reminder_command))
 
   dispatcher.add_handler(CallbackQueryHandler(queryHandler))
 
