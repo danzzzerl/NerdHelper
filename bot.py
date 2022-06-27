@@ -26,7 +26,8 @@ def start_command(update: Update, _: CallbackContext) -> None:
     update.message.reply_text(
         f'Hi {name}!, use me as a to-do list for your tasks! ' +
         'To get started, use /addtask followed by the name of your task to add a new task to your list, and ' +
-        '/list to view your current list.\n\n' +
+        '/list to view your current list.\n' +
+        '/startpomo to start a pomodoro timer of 25 minutes\n\n'
         'Do go to /help to look at how to use the other commands!'
     )
 
@@ -38,7 +39,7 @@ def help_command(update: Update, _:CallbackContext) -> None:
         '/donetask followed by the number of that task on the list to remove that task.\n' + 
         '/list to view your current to-do list\n' + 
         '/newlist to delete your current list and start a new one\n' +
-        '/startpomo to start a pomodoro timer of 25mins and will remind you time left with intervals of 5mins\n'
+        '/startpomo to start a pomodoro timer of 25mins\n'
         '/help to look at the bot commands again!'
   )
 
