@@ -116,15 +116,13 @@ def create_new(update: Update, context:CallbackContext):
   context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(buttons), text="Are you sure?")
 
 
-def pomodoro_timer(update: Update, context: CallbackContext):
+def pomodoro_timer(update: Update, context:CallbackContext):
   global pomodoro
   timeleft = pomodoro
   context.bot.send_message(chat_id=update.effective_chat.id, text=f'Pomodoro timer of 25minutes started!')
   while timeleft:
-    time.sleep(300)
-    timeleft -= 300
-    minutes = timeleft // 60
-    context.bot.send_message(chat_id=update.effective_chat.id, text=f'{minutes} mins left! Keep pushing!!!')
+    time.sleep(25*60)
+    timeleft -= 25*60
 
   # when the pomodoro timer ends
   context.bot.send_message(chat_id=update.effective_chat.id,
