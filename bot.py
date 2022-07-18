@@ -135,6 +135,25 @@ def start_pomo(update: Update, context: CallbackContext):
   context.bot.send_message(chat_id=update.effective_chat.id,
                            text=f'Pomodoro timer of 25 minutes have finished! /startpomo to start another cycle of 25mins!')
 
+def reminder_command(update: Update, context: CallbackContext):
+  chatid = update.message.chat.id
+  reminderbuttons = []
+  b = []
+  # error when no task in to_do list
+  if chatid not in todo_dictionary:
+    update.message.reply_text('There is no tasks in your list to set a reminder for! Add a task before setting a reminder')
+
+  else:
+    todo_list = todo_dictionary.get(chatid)
+    for k, v in todo_list:
+      b.append(v)
+    flatten = [str(task) for task in b]
+    for i in range(1, len(flatten)):
+      newbutton = [InlineKeyboardButton((f'{flatten[i]}'), callback_data=f'{flatten[i]}')]
+      reminderbuttons.append(newbutton)
+    context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(reminderbuttons),
+                               text="Which task do you want to set a reminder for?")
+
 
 def queryHandler(update: Update, context:CallbackContext):
   query = update.callback_query.data
@@ -274,12 +293,6 @@ def queryHandler(update: Update, context:CallbackContext):
     for i in range (1, len(todo_list)):
       str += f'{i}. ' + f'{todo_list[i][1]}\n'
     context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
-
-
-
-
-
-    
 
 def main() -> None:
   updater = Updater(token= TOKEN, use_context=True)
