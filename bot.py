@@ -14,7 +14,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # global variables
-TOKEN = '5362228092:AAHZs65AIhRe9osKuQPPQRuSzCAsjBdjcD8'
+TOKEN = os.environ['TELETOKEN']
 todo_dictionary = {"default": "To-do List:"}
 chatid = 0
 task_name = ''
