@@ -167,7 +167,7 @@ def queryHandler(update: Update, context:CallbackContext):
       context.bot.send_message(chat_id=update.effective_chat.id, text=f'{defaultPrintable}')
 
       # set boolean to False to prevent multiple clicks of button
-      boolean_dictionary[chatid] == False
+      boolean_dictionary[chatid] = False
 
 
   if "no" in query:
@@ -176,7 +176,7 @@ def queryHandler(update: Update, context:CallbackContext):
       context.bot.send_message(chat_id=update.effective_chat.id, text='Keep up with the good work and completing of tasks! You can do it! :)')
       
       # set boolean to False to prevent multiple clicks of button
-      boolean_dictionary[chatid] == False
+      boolean_dictionary[chatid] = False
 
 
   if "1" in query:
