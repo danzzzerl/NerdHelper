@@ -117,19 +117,13 @@ def create_new(update: Update, context:CallbackContext):
   context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(buttons), text="Are you sure?")
 
 
-def start_pomo(update: Update, context: CallbackContext):
-  global timer
-  context.bot.send_message(chat_id=update.effective_chat.id, text='Pomodoro timer of 25minutes have started!',
-                           reply_markup=InlineKeyboardMarkup(
-                             [[InlineKeyboardButton("Check time", callback_data='checktime')]]))
-  if timer >= 0:
-    time.sleep(1)
-    timer -= 1
-
-  if timer == 0:
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                             text=f'Pomodoro timer of 25 minutes have finished! /startpomo to start another cycle of 25mins!')
-  timer = 25 * 60
+def pomodoro_timer(update: Update, context:CallbackContext):
+  global pomodoro
+  timeleft = pomodoro
+  context.bot.send_message(chat_id=update.effective_chat.id, text=f'Pomodoro timer of 25minutes started!')
+  while timeleft:
+    time.sleep(25*60)
+    timeleft -= 25*60
 
   # when the pomodoro timer ends
   context.bot.send_message(chat_id=update.effective_chat.id,
@@ -158,12 +152,6 @@ def reminder_command(update: Update, context: CallbackContext):
 def queryHandler(update: Update, context:CallbackContext):
   query = update.callback_query.data
   update.callback_query.answer()
-
-  if 'checktime' in query:
-    global timer
-    timeleft = timer // 60
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                             text=f'{timeleft} mins left on the pomodoro timer! Keep pushing hard!')
 
   if "yes" in query:
     chatid = update.effective_chat.id
@@ -305,7 +293,7 @@ def main() -> None:
   dispatcher.add_handler(CommandHandler('addtask', add_task))
   dispatcher.add_handler(CommandHandler('donetask', done_task))
   dispatcher.add_handler(CommandHandler('newlist', create_new))
-  dispatcher.add_handler(CommandHandler('startpomo', start_pomo))
+  dispatcher.add_handler(CommandHandler('startpomo', pomodoro_timer))
 
   dispatcher.add_handler(CallbackQueryHandler(queryHandler))
 
