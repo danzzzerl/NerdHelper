@@ -117,6 +117,8 @@ def done_task(update: Update, _:CallbackContext) -> None:
 
 
 def create_new(update: Update, context:CallbackContext):
+  chatid = update.message.chat.id
+  boolean_dictionary[chatid] = True
   buttons = [[InlineKeyboardButton("Yes 👍🏽", callback_data="yes")], [InlineKeyboardButton("No 👎🏽", callback_data="no")]]
   context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(buttons), text="Are you sure?")
 
@@ -159,13 +161,22 @@ def queryHandler(update: Update, context:CallbackContext):
 
   if "yes" in query:
     chatid = update.effective_chat.id
-    todo_dictionary[chatid] = [(0, 'To-do List:')]
-    defaultPrintable = todo_dictionary.get("default")
-    context.bot.send_message(chat_id=update.effective_chat.id, text=f'{defaultPrintable}')
+    if boolean_dictionary[chatid] == True:
+      todo_dictionary[chatid] = [(0, 'To-do List:')]
+      defaultPrintable = todo_dictionary.get("default")
+      context.bot.send_message(chat_id=update.effective_chat.id, text=f'{defaultPrintable}')
+
+      # set boolean to False to prevent multiple clicks of button
+      boolean_dictionary[chatid] == False
 
 
   if "no" in query:
-    context.bot.send_message(chat_id=update.effective_chat.id, text='Keep up with the good work and completing of tasks! You can do it! :)')
+    chatid = update.effective_chat.id
+    if boolean_dictionary[chatid] == True:
+      context.bot.send_message(chat_id=update.effective_chat.id, text='Keep up with the good work and completing of tasks! You can do it! :)')
+      
+      # set boolean to False to prevent multiple clicks of button
+      boolean_dictionary[chatid] == False
 
 
   if "1" in query:
