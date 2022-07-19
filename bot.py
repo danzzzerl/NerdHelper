@@ -36,7 +36,7 @@ def start_command(update: Update, _: CallbackContext) -> None:
 
 def help_command(update: Update, _:CallbackContext) -> None:
   update.message.reply_text('This bot is basically a to-do list for your tasks, implemented with a priority system! Commands:\n' +
-        '/start to start the bot/n' 
+        '/start to start the bot\n' 
         '/addtask followed by your task to add your new task\n' + 
         '/donetask followed by the number of that task on the list to remove that task.\n' + 
         '/list to view your current to-do list\n' + 
@@ -194,8 +194,8 @@ def queryHandler(update: Update, context:CallbackContext):
     
       
   if "2" in query:
+    chatid = update.effective_chat.id
     if boolean_dictionary[chatid] == True:
-      chatid = update.effective_chat.id
       # access todo array if it is present in the dictionary,
       # else create a new todo array
       if chatid in todo_dictionary:
@@ -219,8 +219,8 @@ def queryHandler(update: Update, context:CallbackContext):
     
 
   if "3" in query:
+    chatid = update.effective_chat.id
     if boolean_dictionary[chatid] == True:
-      chatid = update.effective_chat.id
       # access todo array if it is present in the dictionary,
       # else create a new todo array
       if chatid in todo_dictionary:
@@ -244,8 +244,8 @@ def queryHandler(update: Update, context:CallbackContext):
 
 
   if "4" in query:
+    chatid = update.effective_chat.id
     if boolean_dictionary[chatid] == True:
-      chatid = update.effective_chat.id
       # access todo array if it is present in the dictionary,
       # else create a new todo array
       if chatid in todo_dictionary:
@@ -269,8 +269,8 @@ def queryHandler(update: Update, context:CallbackContext):
 
 
   if "5" in query:
+    chatid = update.effective_chat.id
     if boolean_dictionary[chatid] == True:
-      chatid = update.effective_chat.id
       # access todo array if it is present in the dictionary,
       # else create a new todo array
       if chatid in todo_dictionary:
@@ -294,8 +294,8 @@ def queryHandler(update: Update, context:CallbackContext):
 
 
   if "6" in query:
+    chatid = update.effective_chat.id
     if boolean_dictionary[chatid] == True:
-      chatid = update.effective_chat.id
       # access todo array if it is present in the dictionary,
       # else create a new todo array
       if chatid in todo_dictionary:
@@ -317,7 +317,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
 
-      
+
 
 def main() -> None:
   updater = Updater(token= TOKEN, use_context=True)
