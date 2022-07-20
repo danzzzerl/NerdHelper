@@ -117,17 +117,31 @@ def create_new(update: Update, context:CallbackContext):
   context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(buttons), text="Are you sure?")
 
 
-def pomodoro_timer(update: Update, context:CallbackContext):
-  global pomodoro
-  timeleft = pomodoro
-  context.bot.send_message(chat_id=update.effective_chat.id, text=f'Pomodoro timer of 25minutes started!')
-  while timeleft:
-    time.sleep(25*60)
-    timeleft -= 25*60
-
-  # when the pomodoro timer ends
-  context.bot.send_message(chat_id=update.effective_chat.id,
-                           text=f'Pomodoro timer of 25 minutes have finished! /startpomo to start another cycle of 25mins!')
+def start_pomo(update: Update, context: CallbackContext):
+  text = update.message.text
+  num_arr = text.split(' ')[1:]
+  # check if there is any input
+  if len(num_arr) < 1:
+    update.message.reply_text(
+      'Please input a number after /startpomo to set a timer of that specific number of minutes!')
+  else:
+    try:
+      # check if text entry is valid
+      num_arr = int(num_arr[0])
+    except ValueError:
+      update.message.reply_text('Please input a valid number for the pomodoro timer')
+    else:
+      timer = int(num_arr)
+      update.message.reply_text(f'Pomodoro timer of {timer} mins started! Stay focused!')
+      # start the timer
+      while timer >= 0:
+        if timer >= 0:
+          time.sleep(1)
+          timer -= 1
+        # when the timer runs out
+        if timer == 0:
+          context.bot.send_message(chat_id=update.effective_chat.id,
+                                   text=f'Pomodoro timer has finished! Good job!!! Use /startpomo to start another timer!')
 
 def reminder_command(update: Update, context: CallbackContext):
   chatid = update.message.chat.id
@@ -293,7 +307,7 @@ def main() -> None:
   dispatcher.add_handler(CommandHandler('addtask', add_task))
   dispatcher.add_handler(CommandHandler('donetask', done_task))
   dispatcher.add_handler(CommandHandler('newlist', create_new))
-  dispatcher.add_handler(CommandHandler('startpomo', pomodoro_timer))
+  dispatcher.add_handler(CommandHandler('startpomo', start_pomo))
   dispatcher.add_handler(CommandHandler('reminder', reminder_command))
 
   dispatcher.add_handler(CallbackQueryHandler(queryHandler))
