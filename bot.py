@@ -1,5 +1,6 @@
 import logging
 import os
+from xmlrpc.client import boolean
 from telegram import *
 from telegram.ext import *
 import time
@@ -16,6 +17,7 @@ logger = logging.getLogger(__name__)
 # global variables
 TOKEN = os.environ['TELETOKEN']
 todo_dictionary = {"default": "To-do List:"}
+boolean_dictionary = {}
 chatid = 0
 task_name = ''
 pomodoro = 25*60
@@ -34,7 +36,7 @@ def start_command(update: Update, _: CallbackContext) -> None:
 
 def help_command(update: Update, _:CallbackContext) -> None:
   update.message.reply_text('This bot is basically a to-do list for your tasks, implemented with a priority system! Commands:\n' +
-        '/start to start the bot' 
+        '/start to start the bot\n' 
         '/addtask followed by your task to add your new task\n' + 
         '/donetask followed by the number of that task on the list to remove that task.\n' + 
         '/list to view your current to-do list\n' + 
@@ -57,6 +59,7 @@ def show_list(update: Update, _:CallbackContext) -> None:
   else:
     # or else show default empty list 
     defaultPrintable = todo_dictionary.get("default")
+    boolean_dictionary[chatid] = True
     update.message.reply_text(f'{defaultPrintable}')
 
 
@@ -76,11 +79,12 @@ def add_task(update: Update, context:CallbackContext):
     # update chat id and task name
     global task_name, chatid
     chatid = update.message.chat.id
+    boolean_dictionary[chatid] = True
     task_name = f'{task_str}'
 
-    buttons = [[InlineKeyboardButton("1", callback_data="1")], [InlineKeyboardButton("2", callback_data="2")], 
-    [InlineKeyboardButton("3", callback_data="3")], [InlineKeyboardButton("4", callback_data="4")], 
-    [InlineKeyboardButton("5", callback_data="5")], [InlineKeyboardButton("None", callback_data="6")]]
+    buttons = [[InlineKeyboardButton("Most Important", callback_data="1")], [InlineKeyboardButton("Important", callback_data="2")], 
+    [InlineKeyboardButton("Average", callback_data="3")], [InlineKeyboardButton("Not So Important", callback_data="4")], 
+    [InlineKeyboardButton("Least Important", callback_data="5")], [InlineKeyboardButton("Miscellaneous", callback_data="6")]]
     context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(buttons), text="What is the priority of this task?")
 
 
@@ -113,6 +117,8 @@ def done_task(update: Update, _:CallbackContext) -> None:
 
 
 def create_new(update: Update, context:CallbackContext):
+  chatid = update.message.chat.id
+  boolean_dictionary[chatid] = True
   buttons = [[InlineKeyboardButton("Yes 👍🏽", callback_data="yes")], [InlineKeyboardButton("No 👎🏽", callback_data="no")]]
   context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(buttons), text="Are you sure?")
 
@@ -169,132 +175,174 @@ def queryHandler(update: Update, context:CallbackContext):
 
   if "yes" in query:
     chatid = update.effective_chat.id
-    todo_dictionary[chatid] = [(0, 'To-do List:')]
-    defaultPrintable = todo_dictionary.get("default")
-    context.bot.send_message(chat_id=update.effective_chat.id, text=f'{defaultPrintable}')
+    if boolean_dictionary[chatid] == True:
+      todo_dictionary[chatid] = [(0, 'To-do List:')]
+      defaultPrintable = todo_dictionary.get("default")
+      context.bot.send_message(chat_id=update.effective_chat.id, text=f'{defaultPrintable}')
+
+      # set boolean to False to prevent multiple clicks of button
+      boolean_dictionary[chatid] = False
+
 
   if "no" in query:
-    context.bot.send_message(chat_id=update.effective_chat.id, text='Keep up with the good work and completing of tasks! You can do it! :)')
+    chatid = update.effective_chat.id
+    if boolean_dictionary[chatid] == True:
+      context.bot.send_message(chat_id=update.effective_chat.id, text='Keep up with the good work and completing of tasks! You can do it! :)')
+      
+      # set boolean to False to prevent multiple clicks of button
+      boolean_dictionary[chatid] = False
+
 
   if "1" in query:
     chatid = update.effective_chat.id
-    # access todo array if it is present in the dictionary,
-    # else create a new todo array
-    if chatid in todo_dictionary:
-      todo_list = todo_dictionary.get(chatid)
-    else:
-      todo_list = [(0, 'To-do List:')]
-      todo_dictionary[chatid] = todo_list
+    if boolean_dictionary[chatid] == True:
+      # access todo array if it is present in the dictionary,
+      # else create a new todo array
+      if chatid in todo_dictionary:
+        todo_list = todo_dictionary.get(chatid)
+      else:
+        todo_list = [(0, 'To-do List:')]
+        todo_dictionary[chatid] = todo_list
 
-    # add the new task to the todo array
-    todo_list.append((1, f'{task_name}'))
-    todo_list.sort(reverse=False)
+      # add the new task to the todo array
+      todo_list.append((1, '(⭐⭐⭐⭐⭐) ' + f'{task_name}'))
+      todo_list.sort(reverse=False)
 
-    # show the updated list
-    str = f'{todo_list[0][1]}\n'
-    for i in range (1, len(todo_list)):
-      str += f'{i}. ' + f'{todo_list[i][1]}\n'
-    context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
+      # show the updated list
+      str = f'{todo_list[0][1]}\n'
+      for i in range (1, len(todo_list)):
+        str += f'{i}. ' + f'{todo_list[i][1]}\n'
+      context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
 
+      # set boolean to False to prevent multiple clicks of button
+      boolean_dictionary[chatid] = False
+    
+      
   if "2" in query:
     chatid = update.effective_chat.id
-    # access todo array if it is present in the dictionary,
-    # else create a new todo array
-    if chatid in todo_dictionary:
-      todo_list = todo_dictionary.get(chatid)
-    else:
-      todo_list = [(0, 'To-do List:')]
-      todo_dictionary[chatid] = todo_list
+    if boolean_dictionary[chatid] == True:
+      # access todo array if it is present in the dictionary,
+      # else create a new todo array
+      if chatid in todo_dictionary:
+        todo_list = todo_dictionary.get(chatid)
+      else:
+        todo_list = [(0, 'To-do List:')]
+        todo_dictionary[chatid] = todo_list
 
-    # add the new task to the todo array
-    todo_list.append((2, f'{task_name}'))
-    todo_list.sort(reverse=False)
+      # add the new task to the todo array
+      todo_list.append((2, '(⭐⭐⭐⭐) ' + f'{task_name}'))
+      todo_list.sort(reverse=False)
 
-    # show the updated list
-    str = f'{todo_list[0][1]}\n'
-    for i in range (1, len(todo_list)):
-      str += f'{i}. ' + f'{todo_list[i][1]}\n'
-    context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
+      # show the updated list
+      str = f'{todo_list[0][1]}\n'
+      for i in range (1, len(todo_list)):
+        str += f'{i}. ' + f'{todo_list[i][1]}\n'
+      context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
+
+      # set boolean to False to prevent multiple clicks of button
+      boolean_dictionary[chatid] = False
+    
 
   if "3" in query:
     chatid = update.effective_chat.id
-    # access todo array if it is present in the dictionary,
-    # else create a new todo array
-    if chatid in todo_dictionary:
-      todo_list = todo_dictionary.get(chatid)
-    else:
-      todo_list = [(0, 'To-do List:')]
-      todo_dictionary[chatid] = todo_list
+    if boolean_dictionary[chatid] == True:
+      # access todo array if it is present in the dictionary,
+      # else create a new todo array
+      if chatid in todo_dictionary:
+        todo_list = todo_dictionary.get(chatid)
+      else:
+        todo_list = [(0, 'To-do List:')]
+        todo_dictionary[chatid] = todo_list
 
-    # add the new task to the todo array
-    todo_list.append((3, f'{task_name}'))
-    todo_list.sort(reverse=False)
+      # add the new task to the todo array
+      todo_list.append((3, '(⭐⭐⭐) ' + f'{task_name}'))
+      todo_list.sort(reverse=False)
 
-    # show the updated list
-    str = f'{todo_list[0][1]}\n'
-    for i in range (1, len(todo_list)):
-      str += f'{i}. ' + f'{todo_list[i][1]}\n'
-    context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
+      # show the updated list
+      str = f'{todo_list[0][1]}\n'
+      for i in range (1, len(todo_list)):
+        str += f'{i}. ' + f'{todo_list[i][1]}\n'
+      context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
+
+      # set boolean to False to prevent multiple clicks of button
+      boolean_dictionary[chatid] = False
+
 
   if "4" in query:
     chatid = update.effective_chat.id
-    # access todo array if it is present in the dictionary,
-    # else create a new todo array
-    if chatid in todo_dictionary:
-      todo_list = todo_dictionary.get(chatid)
-    else:
-      todo_list = [(0, 'To-do List:')]
-      todo_dictionary[chatid] = todo_list
+    if boolean_dictionary[chatid] == True:
+      # access todo array if it is present in the dictionary,
+      # else create a new todo array
+      if chatid in todo_dictionary:
+        todo_list = todo_dictionary.get(chatid)
+      else:
+        todo_list = [(0, 'To-do List:')]
+        todo_dictionary[chatid] = todo_list
 
-    # add the new task to the todo array
-    todo_list.append((4, f'{task_name}'))
-    todo_list.sort(reverse=False)
+      # add the new task to the todo array
+      todo_list.append((4, '(⭐⭐) ' + f'{task_name}'))
+      todo_list.sort(reverse=False)
 
-    # show the updated list
-    str = f'{todo_list[0][1]}\n'
-    for i in range (1, len(todo_list)):
-      str += f'{i}. ' + f'{todo_list[i][1]}\n'
-    context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
+      # show the updated list
+      str = f'{todo_list[0][1]}\n'
+      for i in range (1, len(todo_list)):
+        str += f'{i}. ' + f'{todo_list[i][1]}\n'
+      context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
+
+      # set boolean to False to prevent multiple clicks of button
+      boolean_dictionary[chatid] = False
+
 
   if "5" in query:
     chatid = update.effective_chat.id
-    # access todo array if it is present in the dictionary,
-    # else create a new todo array
-    if chatid in todo_dictionary:
-      todo_list = todo_dictionary.get(chatid)
-    else:
-      todo_list = [(0, 'To-do List:')]
-      todo_dictionary[chatid] = todo_list
+    if boolean_dictionary[chatid] == True:
+      # access todo array if it is present in the dictionary,
+      # else create a new todo array
+      if chatid in todo_dictionary:
+        todo_list = todo_dictionary.get(chatid)
+      else:
+        todo_list = [(0, 'To-do List:')]
+        todo_dictionary[chatid] = todo_list
 
-    # add the new task to the todo array
-    todo_list.append((5, f'{task_name}'))
-    todo_list.sort(reverse=False)
+      # add the new task to the todo array
+      todo_list.append((5, '(⭐) ' + f'{task_name}'))
+      todo_list.sort(reverse=False)
 
-    # show the updated list
-    str = f'{todo_list[0][1]}\n'
-    for i in range (1, len(todo_list)):
-      str += f'{i}. ' + f'{todo_list[i][1]}\n'
-    context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
+      # show the updated list
+      str = f'{todo_list[0][1]}\n'
+      for i in range (1, len(todo_list)):
+        str += f'{i}. ' + f'{todo_list[i][1]}\n'
+      context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
+
+      # set boolean to False to prevent multiple clicks of button
+      boolean_dictionary[chatid] = False
+
 
   if "6" in query:
     chatid = update.effective_chat.id
-    # access todo array if it is present in the dictionary,
-    # else create a new todo array
-    if chatid in todo_dictionary:
-      todo_list = todo_dictionary.get(chatid)
-    else:
-      todo_list = [(0, 'To-do List:')]
-      todo_dictionary[chatid] = todo_list
+    if boolean_dictionary[chatid] == True:
+      # access todo array if it is present in the dictionary,
+      # else create a new todo array
+      if chatid in todo_dictionary:
+        todo_list = todo_dictionary.get(chatid)
+      else:
+        todo_list = [(0, 'To-do List:')]
+        todo_dictionary[chatid] = todo_list
 
-    # add the new task to the todo array
-    todo_list.append((10, f'{task_name}'))
-    todo_list.sort(reverse=False)
+      # add the new task to the todo array
+      todo_list.append((10, '(✨) ' + f'{task_name}'))
+      todo_list.sort(reverse=False)
 
-    # show the updated list
-    str = f'{todo_list[0][1]}\n'
-    for i in range (1, len(todo_list)):
-      str += f'{i}. ' + f'{todo_list[i][1]}\n'
-    context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
+      # show the updated list
+      str = f'{todo_list[0][1]}\n'
+      for i in range (1, len(todo_list)):
+        str += f'{i}. ' + f'{todo_list[i][1]}\n'
+      context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
+
+      # set boolean to False to prevent multiple clicks of button
+      boolean_dictionary[chatid] = False
+
+
 
 def main() -> None:
   updater = Updater(token= TOKEN, use_context=True)
