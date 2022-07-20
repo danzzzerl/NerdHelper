@@ -197,7 +197,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # show the updated list
       str = f'{todo_list[0][1]}\n'
       for i in range (1, len(todo_list)):
-        str += f'{i}. ' + f'{todo_list[i][1]}\n'
+        str += f'{i}. (⭐⭐⭐⭐⭐)' + f'{todo_list[i][1]}\n'
       context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
@@ -222,7 +222,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # show the updated list
       str = f'{todo_list[0][1]}\n'
       for i in range (1, len(todo_list)):
-        str += f'{i}. ' + f'{todo_list[i][1]}\n'
+        str += f'{i}. (⭐⭐⭐⭐)' + f'{todo_list[i][1]}\n'
       context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
@@ -247,7 +247,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # show the updated list
       str = f'{todo_list[0][1]}\n'
       for i in range (1, len(todo_list)):
-        str += f'{i}. ' + f'{todo_list[i][1]}\n'
+        str += f'{i}. (⭐⭐⭐)' + f'{todo_list[i][1]}\n'
       context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
@@ -272,7 +272,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # show the updated list
       str = f'{todo_list[0][1]}\n'
       for i in range (1, len(todo_list)):
-        str += f'{i}. ' + f'{todo_list[i][1]}\n'
+        str += f'{i}. (⭐⭐)' + f'{todo_list[i][1]}\n'
       context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
@@ -297,7 +297,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # show the updated list
       str = f'{todo_list[0][1]}\n'
       for i in range (1, len(todo_list)):
-        str += f'{i}. ' + f'{todo_list[i][1]}\n'
+        str += f'{i}. (⭐)' + f'{todo_list[i][1]}\n'
       context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
@@ -322,7 +322,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # show the updated list
       str = f'{todo_list[0][1]}\n'
       for i in range (1, len(todo_list)):
-        str += f'{i}. ' + f'{todo_list[i][1]}\n'
+        str += f'{i}. (✨)' + f'{todo_list[i][1]}\n'
       context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
