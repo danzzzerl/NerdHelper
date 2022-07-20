@@ -191,13 +191,13 @@ def queryHandler(update: Update, context:CallbackContext):
         todo_dictionary[chatid] = todo_list
 
       # add the new task to the todo array
-      todo_list.append((1, f'{task_name}'))
+      todo_list.append((1, '(⭐⭐⭐⭐⭐) ' + f'{task_name}'))
       todo_list.sort(reverse=False)
 
       # show the updated list
       str = f'{todo_list[0][1]}\n'
       for i in range (1, len(todo_list)):
-        str += f'{i}. (⭐⭐⭐⭐⭐)' + f'{todo_list[i][1]}\n'
+        str += f'{i}. ' + f'{todo_list[i][1]}\n'
       context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
@@ -216,13 +216,13 @@ def queryHandler(update: Update, context:CallbackContext):
         todo_dictionary[chatid] = todo_list
 
       # add the new task to the todo array
-      todo_list.append((2, f'{task_name}'))
+      todo_list.append((2, '(⭐⭐⭐⭐) ' + f'{task_name}'))
       todo_list.sort(reverse=False)
 
       # show the updated list
       str = f'{todo_list[0][1]}\n'
       for i in range (1, len(todo_list)):
-        str += f'{i}. (⭐⭐⭐⭐)' + f'{todo_list[i][1]}\n'
+        str += f'{i}. ' + f'{todo_list[i][1]}\n'
       context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
@@ -241,13 +241,13 @@ def queryHandler(update: Update, context:CallbackContext):
         todo_dictionary[chatid] = todo_list
 
       # add the new task to the todo array
-      todo_list.append((3, f'{task_name}'))
+      todo_list.append((3, '(⭐⭐⭐) ' + f'{task_name}'))
       todo_list.sort(reverse=False)
 
       # show the updated list
       str = f'{todo_list[0][1]}\n'
       for i in range (1, len(todo_list)):
-        str += f'{i}. (⭐⭐⭐)' + f'{todo_list[i][1]}\n'
+        str += f'{i}. ' + f'{todo_list[i][1]}\n'
       context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
@@ -266,13 +266,13 @@ def queryHandler(update: Update, context:CallbackContext):
         todo_dictionary[chatid] = todo_list
 
       # add the new task to the todo array
-      todo_list.append((4, f'{task_name}'))
+      todo_list.append((4, '(⭐⭐) ' + f'{task_name}'))
       todo_list.sort(reverse=False)
 
       # show the updated list
       str = f'{todo_list[0][1]}\n'
       for i in range (1, len(todo_list)):
-        str += f'{i}. (⭐⭐)' + f'{todo_list[i][1]}\n'
+        str += f'{i}. ' + f'{todo_list[i][1]}\n'
       context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
@@ -291,13 +291,13 @@ def queryHandler(update: Update, context:CallbackContext):
         todo_dictionary[chatid] = todo_list
 
       # add the new task to the todo array
-      todo_list.append((5, f'{task_name}'))
+      todo_list.append((5, '(⭐) ' + f'{task_name}'))
       todo_list.sort(reverse=False)
 
       # show the updated list
       str = f'{todo_list[0][1]}\n'
       for i in range (1, len(todo_list)):
-        str += f'{i}. (⭐)' + f'{todo_list[i][1]}\n'
+        str += f'{i}. ' + f'{todo_list[i][1]}\n'
       context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
@@ -316,13 +316,13 @@ def queryHandler(update: Update, context:CallbackContext):
         todo_dictionary[chatid] = todo_list
 
       # add the new task to the todo array
-      todo_list.append((10, f'{task_name}'))
+      todo_list.append((10, '(✨) ' + f'{task_name}'))
       todo_list.sort(reverse=False)
 
       # show the updated list
       str = f'{todo_list[0][1]}\n'
       for i in range (1, len(todo_list)):
-        str += f'{i}. (✨)' + f'{todo_list[i][1]}\n'
+        str += f'{i}. ' + f'{todo_list[i][1]}\n'
       context.bot.send_message(chat_id=update.effective_chat.id, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
