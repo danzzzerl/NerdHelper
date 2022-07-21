@@ -18,9 +18,10 @@ logger = logging.getLogger(__name__)
 TOKEN = os.environ['TELETOKEN']
 todo_dictionary = {"default": "To-do List:"}
 boolean_dictionary = {}
+boolean_messagedict = {}
 chatid = 0
 task_name = ''
-pomodoro = 25*60
+UpdatableNumber = 0
 
 def start_command(update: Update, _: CallbackContext) -> None:
     user = update.message.from_user
@@ -29,19 +30,21 @@ def start_command(update: Update, _: CallbackContext) -> None:
         f'Hi {name}!, use me as a to-do list for your tasks! ' +
         'To get started, use /addtask followed by the name of your task to add a new task to your list, and ' +
         '/list to view your current list.\n' +
-        '/startpomo to start a pomodoro timer of 25 minutes\n\n'
+        '/starttimer to start a customisable timer.\n\n'
         'Do go to /help to look at how to use the other commands!'
     )
 
 
 def help_command(update: Update, _:CallbackContext) -> None:
   update.message.reply_text('This bot is basically a to-do list for your tasks, implemented with a priority system! Commands:\n' +
-        '/start to start the bot\n' 
-        '/addtask followed by your task to add your new task\n' + 
-        '/donetask followed by the number of that task on the list to remove that task.\n' + 
-        '/list to view your current to-do list\n' + 
-        '/newlist to delete your current list and start a new one\n' +
-        '/startpomo to start a pomodoro timer of 25mins\n'
+        '/start to start the bot\n\n' 
+        '/addtask followed by your task to add your new task\n\n' + 
+        '/donetask followed by the number of that task on the list to remove that task.\n\n' + 
+        '/list to view your current to-do list\n\n' + 
+        '/newlist to delete your current list and start a new one\n\n' +
+        '/starttimer to start a customisable timer\n' +
+        '- this is just a regular timer that will send a message when the timer is up!\n' +
+        '- according to the Pomodoro technique, the recommended timer for doing a task is 25 minutes per session! For more information on this technique, please go to https://todoist.com/productivity-methods/pomodoro-technique \n\n' +
         '/help to look at the bot commands again!'
   )
 
@@ -123,22 +126,22 @@ def create_new(update: Update, context:CallbackContext):
   context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(buttons), text="Are you sure?")
 
 
-def start_pomo(update: Update, context: CallbackContext):
+def start_timer(update: Update, context: CallbackContext):
   text = update.message.text
   num_arr = text.split(' ')[1:]
   # check if there is any input
   if len(num_arr) < 1:
     update.message.reply_text(
-      'Please input a number after /startpomo to set a timer of that specific number of minutes!')
+      'Please input a number after /starttimer to set a timer of that specific number of minutes!')
   else:
     try:
       # check if text entry is valid
       num_arr = int(num_arr[0])
     except ValueError:
-      update.message.reply_text('Please input a valid number for the pomodoro timer')
+      update.message.reply_text('Please input a valid number for the timer')
     else:
       timer = int(num_arr)
-      update.message.reply_text(f'Pomodoro timer of {timer} mins started! Stay focused!')
+      update.message.reply_text(f'Timer of {timer} mins started! Stay focused!')
       # start the timer
       while timer >= 0:
         if timer >= 0:
@@ -147,7 +150,8 @@ def start_pomo(update: Update, context: CallbackContext):
         # when the timer runs out
         if timer == 0:
           context.bot.send_message(chat_id=update.effective_chat.id,
-                                   text=f'Pomodoro timer has finished! Good job!!! Use /startpomo to start another timer!')
+                                   text=f'Timer has finished! Good job!!! Use /starttimer to start another timer!')
+
 
 def reminder_command(update: Update, context: CallbackContext):
   chatid = update.message.chat.id
@@ -167,6 +171,58 @@ def reminder_command(update: Update, context: CallbackContext):
       reminderbuttons.append(newbutton)
     context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(reminderbuttons),
                                text="Which task do you want to set a reminder for?")
+
+
+def task_update(update: Update, context:CallbackContext) -> None:
+  text = update.message.text
+  numbers = text.split(' ')[1:]
+
+  if len(numbers) != 1:
+    # show error message if there is more or less than 1 number after the command
+    update.message.reply_text('Update your task again by typing /updatetask followed by the number of the task that you want to change!')
+  else:
+    # update chat id
+    chatid = update.message.chat.id
+
+    # access todo array
+    todo_list = todo_dictionary.get(chatid)
+
+    # remove the task from the list
+    number = int(numbers[0])
+    if (number > (len(todo_list) - 1)) or (number < 1):
+      update.message.reply_text('Repeat command with a valid number to successfully update the task!')
+    else:
+      global UpdatableNumber
+      UpdatableNumber = number
+      update.message.reply_text('What do you want to rename/update this task to?')
+      boolean_messagedict[chatid] = True
+
+
+def updatetask(int, update: Update, context:CallbackContext):
+  chatid = update.message.chat.id
+  text = update.message.text
+  text_arr = text.split(' ')
+
+  if len(text_arr) < 1:
+      # show error message if no words are after the command
+      update.message.reply_text('Add your task again by typing /addtask followed by the name of the task in the same message!')
+  else:
+      todo_list = todo_dictionary.get(chatid)
+      todo_list.pop(int)
+      # get the intended task to add as a string stored in task_str
+      task_str = ''
+      for i in range (len(text_arr)):
+        task_str += f'{text_arr[i]} '
+
+      chatid = update.message.chat.id
+      boolean_dictionary[chatid] = True
+      global task_name
+      task_name = f'{task_str}'
+
+      buttons = [[InlineKeyboardButton("Most Important", callback_data="1")], [InlineKeyboardButton("Important", callback_data="2")], 
+      [InlineKeyboardButton("Average", callback_data="3")], [InlineKeyboardButton("Not So Important", callback_data="4")], 
+      [InlineKeyboardButton("Least Important", callback_data="5")], [InlineKeyboardButton("Miscellaneous", callback_data="6")]]
+      context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(buttons), text="What is the priority of this task?")
 
 
 def queryHandler(update: Update, context:CallbackContext):
@@ -205,7 +261,7 @@ def queryHandler(update: Update, context:CallbackContext):
         todo_dictionary[chatid] = todo_list
 
       # add the new task to the todo array
-      todo_list.append((1, '(⭐⭐⭐⭐⭐) ' + f'{task_name}'))
+      todo_list.append((1, '(⭐⭐⭐⭐⭐)\n' + f'{task_name}'))
       todo_list.sort(reverse=False)
 
       # show the updated list
@@ -230,7 +286,7 @@ def queryHandler(update: Update, context:CallbackContext):
         todo_dictionary[chatid] = todo_list
 
       # add the new task to the todo array
-      todo_list.append((2, '(⭐⭐⭐⭐) ' + f'{task_name}'))
+      todo_list.append((2, '(⭐⭐⭐⭐)\n' + f'{task_name}'))
       todo_list.sort(reverse=False)
 
       # show the updated list
@@ -255,7 +311,7 @@ def queryHandler(update: Update, context:CallbackContext):
         todo_dictionary[chatid] = todo_list
 
       # add the new task to the todo array
-      todo_list.append((3, '(⭐⭐⭐) ' + f'{task_name}'))
+      todo_list.append((3, '(⭐⭐⭐)\n' + f'{task_name}'))
       todo_list.sort(reverse=False)
 
       # show the updated list
@@ -280,7 +336,7 @@ def queryHandler(update: Update, context:CallbackContext):
         todo_dictionary[chatid] = todo_list
 
       # add the new task to the todo array
-      todo_list.append((4, '(⭐⭐) ' + f'{task_name}'))
+      todo_list.append((4, '(⭐⭐)\n' + f'{task_name}'))
       todo_list.sort(reverse=False)
 
       # show the updated list
@@ -305,7 +361,7 @@ def queryHandler(update: Update, context:CallbackContext):
         todo_dictionary[chatid] = todo_list
 
       # add the new task to the todo array
-      todo_list.append((5, '(⭐) ' + f'{task_name}'))
+      todo_list.append((5, '(⭐)\n' + f'{task_name}'))
       todo_list.sort(reverse=False)
 
       # show the updated list
@@ -330,7 +386,7 @@ def queryHandler(update: Update, context:CallbackContext):
         todo_dictionary[chatid] = todo_list
 
       # add the new task to the todo array
-      todo_list.append((10, '(✨) ' + f'{task_name}'))
+      todo_list.append((10, '(✨)\n' + f'{task_name}'))
       todo_list.sort(reverse=False)
 
       # show the updated list
@@ -342,6 +398,14 @@ def queryHandler(update: Update, context:CallbackContext):
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
 
+      
+def prompts(update: Update, context: CallbackContext):
+    chatid = update.effective_chat.id
+    if boolean_messagedict[chatid] == True:
+        return updatetask(UpdatableNumber, update, context)
+        boolean_messagedict[chatid] = False
+    else:
+        pass
 
 
 def main() -> None:
@@ -355,8 +419,11 @@ def main() -> None:
   dispatcher.add_handler(CommandHandler('addtask', add_task))
   dispatcher.add_handler(CommandHandler('donetask', done_task))
   dispatcher.add_handler(CommandHandler('newlist', create_new))
-  dispatcher.add_handler(CommandHandler('startpomo', start_pomo))
+  dispatcher.add_handler(CommandHandler('starttimer', start_timer))
   dispatcher.add_handler(CommandHandler('reminder', reminder_command))
+  dispatcher.add_handler(CommandHandler('updatetask', task_update))
+
+  dispatcher.add_handler(MessageHandler(Filters.text, prompts))
 
   dispatcher.add_handler(CallbackQueryHandler(queryHandler))
 
