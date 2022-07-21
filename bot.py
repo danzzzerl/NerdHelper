@@ -140,7 +140,7 @@ def start_timer(update: Update, context: CallbackContext):
     except ValueError:
       update.message.reply_text('Please input a valid number for the timer')
     else:
-      timer = int(num_arr)
+      timer = int(num_arr) * 60
       update.message.reply_text(f'Timer of {timer} mins started! Stay focused!')
       # start the timer
       while timer >= 0:
