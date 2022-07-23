@@ -10,6 +10,7 @@ PORT = int(os.environ.get('PORT', 5000))
 
 firebaseConfig = {'apiKey': "AIzaSyAs9HemS9WTckbxSofzQvH0_B6SgKKtTfQ",
   'authDomain': "nerdhelperr.firebaseapp.com",
+  'databaseURL': "https://nerdhelperr-default-rtdb.asia-southeast1.firebasedatabase.app",
   'projectId': "nerdhelperr",
   'storageBucket': "nerdhelperr.appspot.com",
   'messagingSenderId': "502568196964",
