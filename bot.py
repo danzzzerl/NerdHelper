@@ -4,25 +4,25 @@ from xmlrpc.client import boolean
 from telegram import *
 from telegram.ext import *
 from threading import Timer
-import pyrebase
+# import pyrebase
 
 PORT = int(os.environ.get('PORT', 5000))
 
-firebaseConfig = {'apiKey': "AIzaSyAs9HemS9WTckbxSofzQvH0_B6SgKKtTfQ",
-  'authDomain': "nerdhelperr.firebaseapp.com",
-  'projectId': "nerdhelperr",
-  'storageBucket': "nerdhelperr.appspot.com",
-  'messagingSenderId': "502568196964",
-  'appId': "1:502568196964:web:7793a70c695e1c98367871",
-  'measurementId': "G-1MDH1DBETP"}
+# firebaseConfig = {'apiKey': "AIzaSyAs9HemS9WTckbxSofzQvH0_B6SgKKtTfQ",
+#   'authDomain': "nerdhelperr.firebaseapp.com",
+#   'projectId': "nerdhelperr",
+#   'storageBucket': "nerdhelperr.appspot.com",
+#   'messagingSenderId': "502568196964",
+#   'appId': "1:502568196964:web:7793a70c695e1c98367871",
+#   'measurementId': "G-1MDH1DBETP"}
 
-firebase=pyrebase.initialize_app(firebaseConfig)
+# firebase=pyrebase.initialize_app(firebaseConfig)
 
-db=firebase.database()
+# db=firebase.database()
 
-# trial test push data
-data = {'name':'Denzel', 'age':22}
-db.push(data)
+# # trial test push data
+# data = {'name':'Denzel', 'age':22}
+# db.push(data)
 
 # enable logging
 logging.basicConfig(
