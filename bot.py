@@ -1,13 +1,26 @@
-import datetime
 import logging
 import os
 from xmlrpc.client import boolean
 from telegram import *
 from telegram.ext import *
-import time
-import firebase
+from threading import Timer
+import pyrebase
 
 PORT = int(os.environ.get('PORT', 5000))
+
+# firebase
+firebaseConfig = { 'apiKey': "AIzaSyAgr3Z6G2U_fHwGUfuiPwMRsphglgvLVZM",
+  'authDomain': "nerdhelper-d8a69.firebaseapp.com",
+  'databaseURL': "https://nerdhelper-d8a69-default-rtdb.asia-southeast1.firebasedatabase.app",
+  'projectId':"nerdhelper-d8a69",
+  'storageBucket': "nerdhelper-d8a69.appspot.com",
+  'messagingSenderId': "863254242724",
+  'appId': "1:863254242724:web:2ef22eefbd6513475e0d31",
+  'measurementId': "G-PG3HGXZY26"}
+
+firebase = pyrebase.initialize_app(firebaseConfig)
+
+db = firebase.database()
 
 # enable logging
 logging.basicConfig(
@@ -24,6 +37,7 @@ boolean_messagedict = {}
 chatid = 0
 task_name = ''
 UpdatableNumber = 0
+timerObject = Timer
 
 
 def start_command(update: Update, _: CallbackContext) -> None:
@@ -143,45 +157,43 @@ def start_timer(update: Update, context: CallbackContext):
     except ValueError:
       update.message.reply_text('Please input a valid number for the timer')
     else:
+      global timerObject
       timer = int(num_arr) * 60
-      update.message.reply_text(f'Timer of {num_arr[0]} mins started! Stay focused!')
-      # start the timer
-      while timer >= 0:
-        if timer >= 0:
-          time.sleep(1)
-          timer -= 1
-        # when the timer runs out
-        if timer == 0:
-          context.bot.send_message(chat_id=update.effective_chat.id,
-                                   text=f'Timer has finished! Good job!!! Use /starttimer to start another timer!')
+      update.message.reply_text(f'⏰ Timer of {int(num_arr)} mins started! Stay focused! ⏰')
+      timerObject = Timer(timer, timer_done, [update])
+      timerObject.start()
+
+
+def timer_done(update: Update):
+  update.message.reply_text('🚨 Timer has ended! 🚨')
+
+
+def end_timer(update: Update, context: CallbackContext):
+  global timerObject
+  timerObject.cancel()
+  update.message.reply_text('❗️ Timer cancelled! ❗️')
+
 
 def reminder_command(update: Update, context: CallbackContext):
-  text = update.message.text
-  numbers = text.split(' ')[1:]
-  if len(numbers) != 1:
-    update.message.reply_text('Please input a number after /reminder to set a reminder for the specific task in your to-do list!')
+  chatid = update.message.chat.id
+  # reminderbuttons = []
+  # b = []
+  # # error when no task in to_do list
+  if chatid not in todo_dictionary:
+    update.message.reply_text('There is no tasks in your list to set a reminder for! Add a task before setting a reminder')
+
   else:
-    chatid = update.message.chat.id
-    todo_list = todo_dictionary.get(chatid)
-    number = int(numbers[0])
-    if (number > (len(todo_list) - 1)) or (number < 1):
-      update.message.reply_text('Repeat command with a valid number to successfully complete task!')
-
-    else:
-      inputdate = input( "Enter the specific date to set the reminder in the format: 'dd/mm/yy': ")
-      day,month,year = inputdate.split('/')
-      isvaliddate = True
-      try:
-        datetime.datetime(int(year), int(month), int(day))
-      except ValueError:
-        isvaliddate = False
-
-      if not isvaliddate:
-        update.message.reply_text("The date that you have entered is not valid! Please enter a valid date to set the reminder for!")
-      else:
-        data = {{"Name": number}, {"Reminder": f'{year}:{month}:{day}'}}
-        firebase.db.push(data)
-        update.message.reply_text('Reminder has been stored!')
+    data = {'age': 22, 'name': 'Denzel', 'race': 'Chinese'}
+    db.push(data)
+  #   todo_list = todo_dictionary.get(chatid)
+  #   for k, v in todo_list:
+  #     b.append(v)
+  #   flatten = [str(task) for task in b]
+  #   for i in range(1, len(flatten)):
+  #     newbutton = [InlineKeyboardButton((f'{flatten[i]}'), callback_data=f'{flatten[i]}')]
+  #     reminderbuttons.append(newbutton)
+  #   context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(reminderbuttons),
+  #                              text="Which task do you want to set a reminder for?")
 
 
 
@@ -273,7 +285,7 @@ def queryHandler(update: Update, context:CallbackContext):
         todo_dictionary[chatid] = todo_list
 
       # add the new task to the todo array
-      todo_list.append((1, '(⭐⭐⭐⭐⭐)\n' + f'{task_name}'))
+      todo_list.append((1, '(⭐⭐⭐⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
 
       # show the updated list
@@ -284,7 +296,7 @@ def queryHandler(update: Update, context:CallbackContext):
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
-    
+        
       
   if "2" in query:
     chatid = update.effective_chat.id
@@ -298,7 +310,7 @@ def queryHandler(update: Update, context:CallbackContext):
         todo_dictionary[chatid] = todo_list
 
       # add the new task to the todo array
-      todo_list.append((2, '(⭐⭐⭐⭐)\n' + f'{task_name}'))
+      todo_list.append((2, '(⭐⭐⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
 
       # show the updated list
@@ -323,7 +335,7 @@ def queryHandler(update: Update, context:CallbackContext):
         todo_dictionary[chatid] = todo_list
 
       # add the new task to the todo array
-      todo_list.append((3, '(⭐⭐⭐)\n' + f'{task_name}'))
+      todo_list.append((3, '(⭐⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
 
       # show the updated list
@@ -348,7 +360,7 @@ def queryHandler(update: Update, context:CallbackContext):
         todo_dictionary[chatid] = todo_list
 
       # add the new task to the todo array
-      todo_list.append((4, '(⭐⭐)\n' + f'{task_name}'))
+      todo_list.append((4, '(⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
 
       # show the updated list
@@ -373,7 +385,7 @@ def queryHandler(update: Update, context:CallbackContext):
         todo_dictionary[chatid] = todo_list
 
       # add the new task to the todo array
-      todo_list.append((5, '(⭐)\n' + f'{task_name}'))
+      todo_list.append((5, '(⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
 
       # show the updated list
@@ -398,7 +410,7 @@ def queryHandler(update: Update, context:CallbackContext):
         todo_dictionary[chatid] = todo_list
 
       # add the new task to the todo array
-      todo_list.append((10, '(✨)\n' + f'{task_name}'))
+      todo_list.append((10, f'{task_name}'))
       todo_list.sort(reverse=False)
 
       # show the updated list
@@ -432,6 +444,7 @@ def main() -> None:
   dispatcher.add_handler(CommandHandler('donetask', done_task))
   dispatcher.add_handler(CommandHandler('newlist', create_new))
   dispatcher.add_handler(CommandHandler('starttimer', start_timer))
+  dispatcher.add_handler(CommandHandler('endtimer', end_timer))
   dispatcher.add_handler(CommandHandler('reminder', reminder_command))
   dispatcher.add_handler(CommandHandler('updatetask', task_update))
 
