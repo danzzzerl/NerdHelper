@@ -4,23 +4,25 @@ from xmlrpc.client import boolean
 from telegram import *
 from telegram.ext import *
 from threading import Timer
-# import pyrebase
+import pyrebase
 
 PORT = int(os.environ.get('PORT', 5000))
 
-# firebase
-# firebaseConfig = { 'apiKey': "AIzaSyAgr3Z6G2U_fHwGUfuiPwMRsphglgvLVZM",
-#   'authDomain': "nerdhelper-d8a69.firebaseapp.com",
-#   'databaseURL': "https://nerdhelper-d8a69-default-rtdb.asia-southeast1.firebasedatabase.app",
-#   'projectId':"nerdhelper-d8a69",
-#   'storageBucket': "nerdhelper-d8a69.appspot.com",
-#   'messagingSenderId': "863254242724",
-#   'appId': "1:863254242724:web:2ef22eefbd6513475e0d31",
-#   'measurementId': "G-PG3HGXZY26"}
+firebaseConfig = {'apiKey': "AIzaSyAs9HemS9WTckbxSofzQvH0_B6SgKKtTfQ",
+  'authDomain': "nerdhelperr.firebaseapp.com",
+  'projectId': "nerdhelperr",
+  'storageBucket': "nerdhelperr.appspot.com",
+  'messagingSenderId': "502568196964",
+  'appId': "1:502568196964:web:7793a70c695e1c98367871",
+  'measurementId': "G-1MDH1DBETP"}
 
-# firebase = pyrebase.initialize_app(firebaseConfig)
+firebase=pyrebase.initialize_app(firebaseConfig)
 
-# db = firebase.database()
+db=firebase.database()
+
+# trial test push data
+data = {'name':'Denzel', 'age':22}
+db.push(data)
 
 # enable logging
 logging.basicConfig(
@@ -174,18 +176,18 @@ def end_timer(update: Update, context: CallbackContext):
   update.message.reply_text('❗️ Timer cancelled! ❗️')
 
 
-def reminder_command(update: Update, context: CallbackContext):
-  chatid = update.message.chat.id
+# def reminder_command(update: Update, context: CallbackContext):
+#   chatid = update.message.chat.id
   # reminderbuttons = []
   # b = []
   # # error when no task in to_do list
-  if chatid not in todo_dictionary:
-    update.message.reply_text('There is no tasks in your list to set a reminder for! Add a task before setting a reminder')
+  # if chatid not in todo_dictionary:
+  #   update.message.reply_text('There is no tasks in your list to set a reminder for! Add a task before setting a reminder')
 
-  else:
+  # else:
     # data = {'age': 22, 'name': 'Denzel', 'race': 'Chinese'}
     # db.push(data)
-    pass
+    # pass
   #   todo_list = todo_dictionary.get(chatid)
   #   for k, v in todo_list:
   #     b.append(v)
@@ -446,7 +448,7 @@ def main() -> None:
   dispatcher.add_handler(CommandHandler('newlist', create_new))
   dispatcher.add_handler(CommandHandler('starttimer', start_timer))
   dispatcher.add_handler(CommandHandler('endtimer', end_timer))
-  dispatcher.add_handler(CommandHandler('reminder', reminder_command))
+  # dispatcher.add_handler(CommandHandler('reminder', reminder_command))
   dispatcher.add_handler(CommandHandler('updatetask', task_update))
 
   dispatcher.add_handler(MessageHandler(Filters.text, prompts))
