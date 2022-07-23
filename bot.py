@@ -4,23 +4,23 @@ from xmlrpc.client import boolean
 from telegram import *
 from telegram.ext import *
 from threading import Timer
-import pyrebase
+# import pyrebase
 
 PORT = int(os.environ.get('PORT', 5000))
 
 # firebase
-firebaseConfig = { 'apiKey': "AIzaSyAgr3Z6G2U_fHwGUfuiPwMRsphglgvLVZM",
-  'authDomain': "nerdhelper-d8a69.firebaseapp.com",
-  'databaseURL': "https://nerdhelper-d8a69-default-rtdb.asia-southeast1.firebasedatabase.app",
-  'projectId':"nerdhelper-d8a69",
-  'storageBucket': "nerdhelper-d8a69.appspot.com",
-  'messagingSenderId': "863254242724",
-  'appId': "1:863254242724:web:2ef22eefbd6513475e0d31",
-  'measurementId': "G-PG3HGXZY26"}
+# firebaseConfig = { 'apiKey': "AIzaSyAgr3Z6G2U_fHwGUfuiPwMRsphglgvLVZM",
+#   'authDomain': "nerdhelper-d8a69.firebaseapp.com",
+#   'databaseURL': "https://nerdhelper-d8a69-default-rtdb.asia-southeast1.firebasedatabase.app",
+#   'projectId':"nerdhelper-d8a69",
+#   'storageBucket': "nerdhelper-d8a69.appspot.com",
+#   'messagingSenderId': "863254242724",
+#   'appId': "1:863254242724:web:2ef22eefbd6513475e0d31",
+#   'measurementId': "G-PG3HGXZY26"}
 
-firebase = pyrebase.initialize_app(firebaseConfig)
+# firebase = pyrebase.initialize_app(firebaseConfig)
 
-db = firebase.database()
+# db = firebase.database()
 
 # enable logging
 logging.basicConfig(
@@ -183,8 +183,9 @@ def reminder_command(update: Update, context: CallbackContext):
     update.message.reply_text('There is no tasks in your list to set a reminder for! Add a task before setting a reminder')
 
   else:
-    data = {'age': 22, 'name': 'Denzel', 'race': 'Chinese'}
-    db.push(data)
+    # data = {'age': 22, 'name': 'Denzel', 'race': 'Chinese'}
+    # db.push(data)
+    pass
   #   todo_list = todo_dictionary.get(chatid)
   #   for k, v in todo_list:
   #     b.append(v)
