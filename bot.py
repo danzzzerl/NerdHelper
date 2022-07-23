@@ -176,27 +176,26 @@ def end_timer(update: Update, context: CallbackContext):
   update.message.reply_text('❗️ Timer cancelled! ❗️')
 
 
-# def reminder_command(update: Update, context: CallbackContext):
-#   chatid = update.message.chat.id
-  # reminderbuttons = []
-  # b = []
-  # # error when no task in to_do list
-  # if chatid not in todo_dictionary:
-  #   update.message.reply_text('There is no tasks in your list to set a reminder for! Add a task before setting a reminder')
+def reminder_command(update: Update, context: CallbackContext):
+  text = update.message.text
+  numbers = text.split(' ')[1:]
 
-  # else:
-    # data = {'age': 22, 'name': 'Denzel', 'race': 'Chinese'}
-    # db.push(data)
-    # pass
-  #   todo_list = todo_dictionary.get(chatid)
-  #   for k, v in todo_list:
-  #     b.append(v)
-  #   flatten = [str(task) for task in b]
-  #   for i in range(1, len(flatten)):
-  #     newbutton = [InlineKeyboardButton((f'{flatten[i]}'), callback_data=f'{flatten[i]}')]
-  #     reminderbuttons.append(newbutton)
-  #   context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(reminderbuttons),
-  #                              text="Which task do you want to set a reminder for?")
+  if len(numbers) != 1:
+    # show error message if there is more or less than 1 number after the command
+    update.message.reply_text('Select your task for reminder again by typing /reminder followed by the number of the task it corresponds to!')
+  else:
+    # update chat id
+    chatid = update.message.chat.id
+
+    # access todo array
+    todo_list = todo_dictionary.get(chatid)
+
+    # add the reminder
+    number = int(numbers[0])
+    if (number > (len(todo_list) - 1)) or (number < 1):
+      update.message.reply_text('Repeat command with a valid number to successfully complete task!')
+    else:
+      pass
 
 
 
@@ -448,7 +447,7 @@ def main() -> None:
   dispatcher.add_handler(CommandHandler('newlist', create_new))
   dispatcher.add_handler(CommandHandler('starttimer', start_timer))
   dispatcher.add_handler(CommandHandler('endtimer', end_timer))
-  # dispatcher.add_handler(CommandHandler('reminder', reminder_command))
+  dispatcher.add_handler(CommandHandler('reminder', reminder_command))
   dispatcher.add_handler(CommandHandler('updatetask', task_update))
 
   dispatcher.add_handler(MessageHandler(Filters.text, prompts))
