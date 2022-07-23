@@ -90,3 +90,6 @@ urllib3==1.26.9
 wcwidth==0.2.5
 webencodings==0.5.1
 widgetsnbextension==3.6.0
+
+firebase~=3.0.1
+Pyrebase~=3.0.27

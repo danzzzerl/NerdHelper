@@ -1,9 +1,11 @@
+import datetime
 import logging
 import os
 from xmlrpc.client import boolean
 from telegram import *
 from telegram.ext import *
 import time
+import firebase
 
 PORT = int(os.environ.get('PORT', 5000))
 
@@ -22,6 +24,7 @@ boolean_messagedict = {}
 chatid = 0
 task_name = ''
 UpdatableNumber = 0
+
 
 def start_command(update: Update, _: CallbackContext) -> None:
     user = update.message.from_user
@@ -152,25 +155,34 @@ def start_timer(update: Update, context: CallbackContext):
           context.bot.send_message(chat_id=update.effective_chat.id,
                                    text=f'Timer has finished! Good job!!! Use /starttimer to start another timer!')
 
-
 def reminder_command(update: Update, context: CallbackContext):
-  chatid = update.message.chat.id
-  reminderbuttons = []
-  b = []
-  # error when no task in to_do list
-  if chatid not in todo_dictionary:
-    update.message.reply_text('There is no tasks in your list to set a reminder for! Add a task before setting a reminder')
-
+  text = update.message.text
+  numbers = text.split(' ')[1:]
+  if len(numbers) != 1:
+    update.message.reply_text('Please input a number after /reminder to set a reminder for the specific task in your to-do list!')
   else:
+    chatid = update.message.chat.id
     todo_list = todo_dictionary.get(chatid)
-    for k, v in todo_list:
-      b.append(v)
-    flatten = [str(task) for task in b]
-    for i in range(1, len(flatten)):
-      newbutton = [InlineKeyboardButton((f'{flatten[i]}'), callback_data=f'{flatten[i]}')]
-      reminderbuttons.append(newbutton)
-    context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(reminderbuttons),
-                               text="Which task do you want to set a reminder for?")
+    number = int(numbers[0])
+    if (number > (len(todo_list) - 1)) or (number < 1):
+      update.message.reply_text('Repeat command with a valid number to successfully complete task!')
+
+    else:
+      inputdate = input( "Enter the specific date to set the reminder in the format: 'dd/mm/yy': ")
+      day,month,year = inputdate.split('/')
+      isvaliddate = True
+      try:
+        datetime.datetime(int(year), int(month), int(day))
+      except ValueError:
+        isvaliddate = False
+
+      if not isvaliddate:
+        update.message.reply_text("The date that you have entered is not valid! Please enter a valid date to set the reminder for!")
+      else:
+        data = {{"Name": number}, {"Reminder": f'{year}:{month}:{day}'}}
+        firebase.db.push(data)
+        update.message.reply_text('Reminder has been stored!')
+
 
 
 def task_update(update: Update, context:CallbackContext) -> None:

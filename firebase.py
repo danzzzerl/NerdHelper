@@ -1,11 +1,19 @@
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import db
+import pyrebase
 
-cred = credentials.Certificate("path/to/serviceAccountKey.json")
-firebase_admin.initialize_app(cred, {
-    'databasURL': 'https://nerdhelper-d8a69-default-rtdb.asia-southeast1.firebasedatabase.app/'
-})
+firebaseConfig = { 'apiKey': "AIzaSyAgr3Z6G2U_fHwGUfuiPwMRsphglgvLVZM",
+  'authDomain': "nerdhelper-d8a69.firebaseapp.com",
+  'databaseURL': "https://nerdhelper-d8a69-default-rtdb.asia-southeast1.firebasedatabase.app",
+  'projectId':"nerdhelper-d8a69",
+  'storageBucket': "nerdhelper-d8a69.appspot.com",
+  'messagingSenderId': "863254242724",
+  'appId': "1:863254242724:web:2ef22eefbd6513475e0d31",
+  'measurementId': "G-PG3HGXZY26"}
 
-ref = db.reference('/')
-ref.set()
+firebase = pyrebase.initialize_app(firebaseConfig)
+
+db = firebase.database()
+
+
+
+
+
