@@ -1,3 +1,4 @@
+from audioop import reverse
 import logging
 import os
 from xmlrpc.client import boolean
@@ -68,18 +69,23 @@ def help_command(update: Update, _:CallbackContext) -> None:
 def show_list(update: Update, context:CallbackContext) -> None:
   # update chat id
   chatid = update.message.chat.id
-  user = db.child('tasklist').child(f'{chatid}').order_by_value().get()
+  user = db.child('tasklist').child(f'{chatid}').get()
 
   if any(user.val()):
     str = 'To-do List:\n'
     index = 1
-    for task in user.each():
-      taskval = task.val()
-      # if taskval[0] == 0:
-      #   str += f'{taskval[1]}\n'
-      # else:
-      str += f'{index}. ' + f'{taskval[1]}\n'
-      index += 1
+    todo_list = user.val()
+    print(todo_list)
+    todo_list.sort(reverse=False)
+    print(todo_list)
+    # for task in user.each():
+    #   taskval = task.val()
+    #   # if taskval[0] == 0:
+    #   #   str += f'{taskval[1]}\n'
+    #   # else:
+    #   str += f'{index}. ' + f'{taskval[1]}\n'
+    #   index += 1
+
     update.message.reply_text(f'{str}')
     
   else:
