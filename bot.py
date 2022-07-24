@@ -136,6 +136,11 @@ def done_task(update: Update, context:CallbackContext) -> None:
     user = db.child('tasklist').child(f'{chatid}').get()
     if any(user.val()):
       todo_list = user.val()
+      try:
+        while True:
+          todo_list.remove(None)
+      except ValueError:
+        pass
       todo_list.sort(reverse=False)
       todo_list.pop(number)
     else:
