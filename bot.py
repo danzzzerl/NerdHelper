@@ -89,7 +89,7 @@ def show_list(update: Update, _:CallbackContext) -> None:
       if todolist[i][0] == 0:
         str += f'{todolist[i][0]}'
       else:
-        str += f'{i}. ' + f'{todolist[i][1]}\n'
+        str += f'{i}. ' + f'{todolist[i]}\n'
     update.message.reply_text(f'{str}')
   else:
     data = {'tasklist': [(0, 'To-do List:')]}
