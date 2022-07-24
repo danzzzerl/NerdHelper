@@ -57,6 +57,7 @@ def help_command(update: Update, _:CallbackContext) -> None:
         '/donetask followed by the number of that task on the list to remove that task.\n\n' + 
         '/list to view your current to-do list\n\n' + 
         '/newlist to delete your current list and start a new one\n\n' +
+        '/reminder to set a reminder for a specific task at a specific date \n\n'
         '/starttimer to start a customisable timer\n' +
         '- this is just a regular timer that will send a message when the timer is up!\n' +
         '- according to the Pomodoro technique, the recommended timer for doing a task is 25 minutes per session! For more information on this technique, please go to https://todoist.com/productivity-methods/pomodoro-technique \n\n' +
