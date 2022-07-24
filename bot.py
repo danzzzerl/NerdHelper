@@ -72,12 +72,14 @@ def show_list(update: Update, context:CallbackContext) -> None:
 
   if any(user.val()):
     str = ''
+    index = 1
     for task in user.each():
       taskval = task.val()
       if taskval[0] == 0:
         str += f'{taskval[1]}\n'
       else:
-        str += f'{task.key()}. ' + f'{taskval[1]}\n'
+        str += f'{index}. ' + f'{taskval[1]}\n'
+        index += 1
     update.message.reply_text(f'{str}')
     
   else:
