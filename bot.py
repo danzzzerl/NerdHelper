@@ -287,7 +287,7 @@ def queryHandler(update: Update, context:CallbackContext):
       todo_list.append((1, '(⭐⭐⭐⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
       data = {f'{todo_list}'}
-      db.child(f'{chatid}').child('tasklist').update(data) 
+      db.child(f'{chatid}').child('tasklist').set(data) 
 
       # show the updated list
       return show_list(update, context)
@@ -310,7 +310,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # add the new task to the todo array
       todo_list.append((2, '(⭐⭐⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
-      data = {f'{todo_list}'}
+      data = {todo_list}
       db.child(f'{chatid}').child('tasklist').update(data)
 
       # show the updated list
