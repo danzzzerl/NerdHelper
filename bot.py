@@ -301,7 +301,7 @@ def queryHandler(update: Update, context:CallbackContext):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
         index += 1
 
-      update.message.reply_text(f'{str}')
+      context.bot.send_message(chat_id=chatid, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
@@ -333,7 +333,7 @@ def queryHandler(update: Update, context:CallbackContext):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
         index += 1
 
-      update.message.reply_text(f'{str}')
+      context.bot.send_message(chat_id=chatid, text=f'{str}')
 
 
       # set boolean to False to prevent multiple clicks of button
@@ -366,7 +366,7 @@ def queryHandler(update: Update, context:CallbackContext):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
         index += 1
 
-      update.message.reply_text(f'{str}')
+      context.bot.send_message(chat_id=chatid, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
@@ -398,7 +398,7 @@ def queryHandler(update: Update, context:CallbackContext):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
         index += 1
 
-      update.message.reply_text(f'{str}')
+      context.bot.send_message(chat_id=chatid, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
@@ -430,7 +430,7 @@ def queryHandler(update: Update, context:CallbackContext):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
         index += 1
 
-      update.message.reply_text(f'{str}')
+      context.bot.send_message(chat_id=chatid, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
@@ -462,7 +462,7 @@ def queryHandler(update: Update, context:CallbackContext):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
         index += 1
 
-      update.message.reply_text(f'{str}')
+      context.bot.send_message(chat_id=chatid, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
