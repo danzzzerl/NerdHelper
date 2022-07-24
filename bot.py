@@ -286,7 +286,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # add the new task to the todo array
       todo_list.append((1, '(⭐⭐⭐⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
-      data = {todo_list}
+      data = {f'{todo_list}'}
       db.child(f'{chatid}').child('tasklist').update(data) 
 
       # show the updated list
@@ -310,7 +310,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # add the new task to the todo array
       todo_list.append((2, '(⭐⭐⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
-      data = {todo_list}
+      data = {f'{todo_list}'}
       db.child(f'{chatid}').child('tasklist').update(data)
 
       # show the updated list
@@ -335,7 +335,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # add the new task to the todo array
       todo_list.append((3, '(⭐⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
-      data = {todo_list}
+      data = {f'{todo_list}'}
       db.child(f'{chatid}').child('tasklist').update(data)
 
       # show the updated list
@@ -359,7 +359,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # add the new task to the todo array
       todo_list.append((4, '(⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
-      data = {todo_list}
+      data = {f'{todo_list}'}
       db.child(f'{chatid}').child('tasklist').update(data)
 
       # show the updated list
@@ -383,7 +383,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # add the new task to the todo array
       todo_list.append((5, '(⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
-      data = {todo_list}
+      data = {f'{todo_list}'}
       db.child(f'{chatid}').child('tasklist').update(data)
 
       # show the updated list
@@ -407,7 +407,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # add the new task to the todo array
       todo_list.append((10, '(Misc)\n' +  f'{task_name}'))
       todo_list.sort(reverse=False)
-      data = {todo_list}
+      data = {f'{todo_list}'}
       db.child(f'{chatid}').child('tasklist').update(data)
 
       # show the updated list
