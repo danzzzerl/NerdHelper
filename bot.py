@@ -81,7 +81,7 @@ def show_list(update: Update, _:CallbackContext) -> None:
   #   update.message.reply_text(f'{defaultPrintable}')
 
   userid = db.child(f'{chatid}').get()
-  tasklist = userid.value()
+  tasklist = userid.val()
   if any(tasklist):
     print(tasklist)
   else:
