@@ -89,7 +89,7 @@ def show_list(update: Update, _:CallbackContext) -> None:
       if taskval[0] == 0:
         str += f'{taskval[1]}\n'
       else:
-        str += f'{task}. ' + f'{taskval[1]}\n'
+        str += f'{task.key()}. ' + f'{taskval[1]}\n'
     update.message.reply_text(f'{str}')
     
   else:
