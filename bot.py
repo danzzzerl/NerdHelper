@@ -80,17 +80,16 @@ def show_list(update: Update, _:CallbackContext) -> None:
   #   boolean_dictionary[chatid] = True
   #   update.message.reply_text(f'{defaultPrintable}')
 
-  userid = db.child(f'{chatid}').get()
-  if any(userid.val()):
-    tasklist = userid.val()
-    todolist = tasklist.get('tasklist')
+  user = db.child(f'{chatid}').child('tasklist').get()
+  if any(user.val()):
     str = ''
-    for i in range (0, len(todolist) - 1):
-      if todolist[i][0] == 0:
-        str += f'{todolist[i][0]}'
+    for task in user.each():
+      if task.val().get(0) == 0:
+        str += f'{task.val().get(1)}'
       else:
-        str += f'{i}. ' + f'{todolist[i]}\n'
+        str += f'{task}' + f'{task.val().get(1)}'
     update.message.reply_text(f'{str}')
+    
   else:
     data = {'tasklist': [(0, 'To-do List:')]}
     db.child(f'{chatid}').set(data)
