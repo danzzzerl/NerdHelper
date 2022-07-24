@@ -69,13 +69,13 @@ def show_list(update: Update, context:CallbackContext) -> None:
   # update chat id
   chatid = update.message.chat.id
   # db.child(f'{chatid}').child('tasklist').order_by_value()
-  user = db.child(f'{chatid}').child('tasklist').get()
+  user = db.child('tasklist').child(f'{chatid}').get()
 
   if any(user.val()):
     str = 'To-do List:\n'
     index = 1
     for task in user.each():
-      taskval = task.key()
+      taskval = task.val()
       # if taskval[0] == 0:
       #   str += f'{taskval[1]}\n'
       # else:
