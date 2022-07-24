@@ -136,6 +136,7 @@ def done_task(update: Update, context:CallbackContext) -> None:
     user = db.child('tasklist').child(f'{chatid}').get()
     if any(user.val()):
       todo_list = user.val()
+      todo_list.sort(reverse=False)
       todo_list.pop(number)
     else:
        update.message.reply_text('Enter a valid task number to delete the task!')
