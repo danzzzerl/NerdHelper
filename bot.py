@@ -81,13 +81,15 @@ def show_list(update: Update, _:CallbackContext) -> None:
   #   update.message.reply_text(f'{defaultPrintable}')
 
   userid = db.child(f'{chatid}').get()
-  tasklist = userid.val()
-  if any(tasklist):
-    print(tasklist)
+  if any(userid.val()):
+    tasklist = userid.val()
+    print(tasklist[1])
   else:
+    data = {'tasklist': [(0, 'To-do List:')]}
+    db.child(f'{chatid}').set(data)
     defaultPrintable = todo_dictionary.get("default")
     boolean_dictionary[chatid] = True
-    update.message.reply_text(f'{defaultPrintable}')
+    update.message.reply_text("To-do List:")
 
 
 def add_task(update: Update, context:CallbackContext):
