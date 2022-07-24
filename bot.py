@@ -284,7 +284,6 @@ def queryHandler(update: Update, context:CallbackContext):
       todo_list = user.val()
 
       # add the new task to the todo array
-      todo_list.append((1, '(⭐⭐⭐⭐⭐)\n' + f'    {task_name}'))
       db.child('tasklist').child(f'{chatid}').set(todo_list) 
 
       # show the updated list
@@ -296,6 +295,7 @@ def queryHandler(update: Update, context:CallbackContext):
           todo_list.remove(None)
       except ValueError:
         pass
+      todo_list.append((1, '(⭐⭐⭐⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
       for i in range (0, len(todo_list) - 1):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
@@ -315,9 +315,7 @@ def queryHandler(update: Update, context:CallbackContext):
       todo_list = user.val()
 
       # add the new task to the todo array
-      todo_list.append((2, '(⭐⭐⭐⭐)\n' + f'    {task_name}'))
       db.child('tasklist').child(f'{chatid}').set(todo_list) 
-
 
       # show the updated list
       str = 'To-do List:\n'
@@ -328,6 +326,7 @@ def queryHandler(update: Update, context:CallbackContext):
           todo_list.remove(None)
       except ValueError:
         pass
+      todo_list.append((2, '(⭐⭐⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
       for i in range (0, len(todo_list) - 1):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
@@ -348,9 +347,7 @@ def queryHandler(update: Update, context:CallbackContext):
       todo_list = user.val()
 
       # add the new task to the todo array
-      todo_list.append((3, '(⭐⭐⭐)\n' + f'    {task_name}'))
       db.child('tasklist').child(f'{chatid}').set(todo_list) 
-
 
       # show the updated list
       str = 'To-do List:\n'
@@ -361,6 +358,7 @@ def queryHandler(update: Update, context:CallbackContext):
           todo_list.remove(None)
       except ValueError:
         pass
+      todo_list.append((3, '(⭐⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
       for i in range (0, len(todo_list) - 1):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
@@ -380,9 +378,7 @@ def queryHandler(update: Update, context:CallbackContext):
       todo_list = user.val()
 
       # add the new task to the todo array
-      todo_list.append((4, '(⭐⭐)\n' + f'    {task_name}'))
       db.child('tasklist').child(f'{chatid}').set(todo_list) 
-
 
       # show the updated list
       str = 'To-do List:\n'
@@ -393,6 +389,7 @@ def queryHandler(update: Update, context:CallbackContext):
           todo_list.remove(None)
       except ValueError:
         pass
+      todo_list.append((4, '(⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
       for i in range (0, len(todo_list) - 1):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
@@ -412,9 +409,7 @@ def queryHandler(update: Update, context:CallbackContext):
       todo_list = user.val()
 
       # add the new task to the todo array
-      todo_list.append((5, '(⭐)\n' + f'    {task_name}'))
       db.child('tasklist').child(f'{chatid}').set(todo_list) 
-
 
       # show the updated list
       str = 'To-do List:\n'
@@ -425,6 +420,7 @@ def queryHandler(update: Update, context:CallbackContext):
           todo_list.remove(None)
       except ValueError:
         pass
+      todo_list.append((5, '(⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
       for i in range (0, len(todo_list) - 1):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
@@ -444,9 +440,7 @@ def queryHandler(update: Update, context:CallbackContext):
       todo_list = user.val()
 
       # add the new task to the todo array
-      todo_list.append((10, '(Misc)\n' +  f'{task_name}'))
       db.child('tasklist').child(f'{chatid}').set(todo_list) 
-
 
       # show the updated list
       str = 'To-do List:\n'
@@ -457,6 +451,7 @@ def queryHandler(update: Update, context:CallbackContext):
           todo_list.remove(None)
       except ValueError:
         pass
+      todo_list.append((10, '(Misc)\n' +  f'    {task_name}'))
       todo_list.sort(reverse=False)
       for i in range (0, len(todo_list) - 1):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
