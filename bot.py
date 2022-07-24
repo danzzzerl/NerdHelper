@@ -67,15 +67,24 @@ def help_command(update: Update, _:CallbackContext) -> None:
 def show_list(update: Update, _:CallbackContext) -> None:
   # update chat id
   chatid = update.message.chat.id
-  if chatid in todo_dictionary:
-    # show list if the chat id exists in the dictionary as a key
-    todo_list = todo_dictionary.get(chatid)
-    str = f'{todo_list[0][1]}\n'
-    for i in range (1, len(todo_list)):
-      str += f'{i}. ' + f'{todo_list[i][1]}\n'
-    update.message.reply_text(f'{str}')
+  # if chatid in todo_dictionary:
+  #   # show list if the chat id exists in the dictionary as a key
+  #   todo_list = todo_dictionary.get(chatid)
+  #   str = f'{todo_list[0][1]}\n'
+  #   for i in range (1, len(todo_list)):
+  #     str += f'{i}. ' + f'{todo_list[i][1]}\n'
+  #   update.message.reply_text(f'{str}')
+  # else:
+  #   # or else show default empty list 
+  #   defaultPrintable = todo_dictionary.get("default")
+  #   boolean_dictionary[chatid] = True
+  #   update.message.reply_text(f'{defaultPrintable}')
+
+  userid = db.child(f'{chatid}').get()
+  tasklist = userid.value()
+  if any(tasklist):
+    print(tasklist)
   else:
-    # or else show default empty list 
     defaultPrintable = todo_dictionary.get("default")
     boolean_dictionary[chatid] = True
     update.message.reply_text(f'{defaultPrintable}')
@@ -126,6 +135,8 @@ def done_task(update: Update, _:CallbackContext) -> None:
       update.message.reply_text('Repeat command with a valid number to successfully complete task!')
     else:
       todo_list.pop(number)
+      data = {'tasklist': f'{todo_list}'}
+      db.child(f'{chatid}').set(data)
 
       # show the updated list
       str = f'{todo_list[0][1]}\n'
