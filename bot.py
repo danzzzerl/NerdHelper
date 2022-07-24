@@ -431,7 +431,7 @@ def queryHandler(update: Update, context:CallbackContext):
         todo_dictionary[chatid] = todo_list
 
       # add the new task to the todo array
-      todo_list.append((10, f'{task_name}'))
+      todo_list.append((10, '(Misc)\n' +  f'{task_name}'))
       todo_list.sort(reverse=False)
       data = {'tasklist': todo_list}
       db.child(f'{chatid}').set(data)
