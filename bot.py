@@ -68,6 +68,7 @@ def help_command(update: Update, _:CallbackContext) -> None:
 def show_list(update: Update, context:CallbackContext) -> None:
   # update chat id
   chatid = update.message.chat.id
+  db.child(f'{chatid}').child('tasklist').order_by_value()
   user = db.child(f'{chatid}').child('tasklist').get()
 
   if any(user.val()):
@@ -285,7 +286,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # add the new task to the todo array
       todo_list.append((1, '(⭐⭐⭐⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
-      data = {1: '(⭐⭐⭐⭐⭐)\n' + f'    {task_name}'}
+      data = {'(⭐⭐⭐⭐⭐)\n' + f'    {task_name}': 1}
       db.child(f'{chatid}').child('tasklist').update(data) 
 
       # show the updated list
@@ -309,7 +310,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # add the new task to the todo array
       todo_list.append((2, '(⭐⭐⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
-      data = {2: '(⭐⭐⭐⭐)\n' + f'    {task_name}'}
+      data = {'(⭐⭐⭐⭐)\n' + f'    {task_name}': 2}
       db.child(f'{chatid}').child('tasklist').update(data)
 
       # show the updated list
@@ -334,7 +335,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # add the new task to the todo array
       todo_list.append((3, '(⭐⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
-      data = {3: '(⭐⭐⭐)\n' + f'    {task_name}'}
+      data = {'(⭐⭐⭐)\n' + f'    {task_name}': 3}
       db.child(f'{chatid}').child('tasklist').update(data)
 
       # show the updated list
@@ -358,7 +359,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # add the new task to the todo array
       todo_list.append((4, '(⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
-      data = {4: '(⭐⭐)\n' + f'    {task_name}'}
+      data = {'(⭐⭐)\n' + f'    {task_name}': 4}
       db.child(f'{chatid}').child('tasklist').update(data)
 
       # show the updated list
@@ -382,7 +383,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # add the new task to the todo array
       todo_list.append((5, '(⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
-      data = {5: '(⭐)\n' + f'    {task_name}'}
+      data = {'(⭐)\n' + f'    {task_name}': 5}
       db.child(f'{chatid}').child('tasklist').update(data)
 
       # show the updated list
@@ -406,7 +407,7 @@ def queryHandler(update: Update, context:CallbackContext):
       # add the new task to the todo array
       todo_list.append((10, '(Misc)\n' +  f'{task_name}'))
       todo_list.sort(reverse=False)
-      data = {10: '(Misc)\n' + f'    {task_name}'}
+      data = {'(Misc)\n' + f'    {task_name}': 10}
       db.child(f'{chatid}').child('tasklist').update(data)
 
       # show the updated list
