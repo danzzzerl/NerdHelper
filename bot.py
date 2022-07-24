@@ -65,23 +65,11 @@ def help_command(update: Update, _:CallbackContext) -> None:
   )
 
 
-def show_list(update: Update, _:CallbackContext) -> None:
+def show_list(update: Update, context:CallbackContext) -> None:
   # update chat id
   chatid = update.message.chat.id
-  # if chatid in todo_dictionary:
-  #   # show list if the chat id exists in the dictionary as a key
-  #   todo_list = todo_dictionary.get(chatid)
-  #   str = f'{todo_list[0][1]}\n'
-  #   for i in range (1, len(todo_list)):
-  #     str += f'{i}. ' + f'{todo_list[i][1]}\n'
-  #   update.message.reply_text(f'{str}')
-  # else:
-  #   # or else show default empty list 
-  #   defaultPrintable = todo_dictionary.get("default")
-  #   boolean_dictionary[chatid] = True
-  #   update.message.reply_text(f'{defaultPrintable}')
-
   user = db.child(f'{chatid}').child('tasklist').get()
+
   if any(user.val()):
     str = ''
     for task in user.each():
@@ -125,7 +113,7 @@ def add_task(update: Update, context:CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(buttons), text="What is the priority of this task?")
 
 
-def done_task(update: Update, _:CallbackContext) -> None:
+def done_task(update: Update, context:CallbackContext) -> None:
   text = update.message.text
   numbers = text.split(' ')[1:]
 
@@ -136,23 +124,16 @@ def done_task(update: Update, _:CallbackContext) -> None:
     # update chat id
     chatid = update.message.chat.id
 
-    # access todo array
-    todo_list = todo_dictionary.get(chatid)
-
     # remove the task from the list
     number = int(numbers[0])
-    if (number > (len(todo_list) - 1)) or (number < 1):
-      update.message.reply_text('Repeat command with a valid number to successfully complete task!')
+    user = db.child(f'{chatid}').child('tasklist').child(number).get()
+    if any(user.val()):
+      db.child(f'{chatid}').child('tasklist').child(number).remove()
     else:
-      todo_list.pop(number)
-      data = {'tasklist': f'{todo_list}'}
-      db.child(f'{chatid}').set(data)
+       update.message.reply_text('Enter a valid task number to delete the task!')
 
-      # show the updated list
-      str = f'{todo_list[0][1]}\n'
-      for i in range (1, len(todo_list)):
-        str += f'{i}. ' + f'{todo_list[i][1]}\n'
-      update.message.reply_text(f'{str}')
+    # show the updated list
+    return show_list(update, context)
 
 
 def create_new(update: Update, context:CallbackContext):
