@@ -289,7 +289,27 @@ def queryHandler(update: Update, context:CallbackContext):
       db.child(f'{chatid}').child('tasklist').update(data) 
 
       # show the updated list
-      return show_list(update, context)
+      user = db.child(f'{chatid}').child('tasklist').get()
+
+      if any(user.val()):
+        str = ''
+        index = 0
+        for task in user.each():
+          taskval = task.val()
+          # if taskval[0] == 0:
+          #   str += f'{taskval[1]}\n'
+          # else:
+          str += f'{index}. ' + f'{taskval[1]}\n'
+          index += 1
+        update.message.reply_text(f'{str}')
+    
+      else:
+        data = {'tasklist': [(0, 'To-do List:')]}
+        db.child(f'{chatid}').set(data)
+        defaultPrintable = todo_dictionary.get("default")
+        boolean_dictionary[chatid] = True
+        update.message.reply_text("To-do List:")
+
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
