@@ -76,6 +76,7 @@ def show_list(update: Update, context:CallbackContext) -> None:
     index = 1
     todo_list = user.val()
     print(todo_list)
+    todo_list.remove(None)
     todo_list.sort(reverse=False)
     print(todo_list)
     for i in range (0, len(todo_list) - 1):
