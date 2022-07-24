@@ -68,7 +68,7 @@ def help_command(update: Update, _:CallbackContext) -> None:
 def show_list(update: Update, context:CallbackContext) -> None:
   # update chat id
   chatid = update.message.chat.id
-  user = db.child('tasklist').child(f'{chatid}').get()
+  user = db.child('tasklist').child(f'{chatid}').order_by_value().get()
 
   if any(user.val()):
     str = 'To-do List:\n'
@@ -274,17 +274,12 @@ def queryHandler(update: Update, context:CallbackContext):
   if "1" in query:
     chatid = update.effective_chat.id
     if boolean_dictionary[chatid] == True:
-      # access todo array if it is present in the dictionary,
-      # else create a new todo array
-      if chatid in todo_dictionary:
-        todo_list = todo_dictionary.get(chatid)
-      else:
-        todo_list = [(0, 'To-do List:')]
-        todo_dictionary[chatid] = todo_list
+     # access todo array
+      user = db.child('tasklist').child(f'{chatid}').get()
+      todo_list = user.val()
 
       # add the new task to the todo array
       todo_list.append((1, '(⭐⭐⭐⭐⭐)\n' + f'    {task_name}'))
-      todo_list.sort(reverse=False)
       db.child('tasklist').child(f'{chatid}').set(todo_list) 
 
       # show the updated list
