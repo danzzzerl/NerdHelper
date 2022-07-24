@@ -83,7 +83,7 @@ def show_list(update: Update, _:CallbackContext) -> None:
   userid = db.child(f'{chatid}').get()
   if any(userid.val()):
     tasklist = userid.val()
-    todolist = list(tasklist.items())[0][1]
+    todolist = tasklist.get('tasklist')
     str = ''
     for i in range (0, len(todolist) - 1):
       if todolist[i][0] == 0:
