@@ -68,13 +68,11 @@ def help_command(update: Update, _:CallbackContext) -> None:
 def show_list(update: Update, context:CallbackContext) -> None:
   # update chat id
   chatid = update.message.chat.id
-  # db.child(f'{chatid}').child('tasklist').order_by_value()
   user = db.child('tasklist').child(f'{chatid}').get()
 
   if any(user.val()):
     str = 'To-do List:\n'
     index = 1
-    print(user.val())
     for task in user.each():
       taskval = task.val()
       # if taskval[0] == 0:
@@ -299,13 +297,9 @@ def queryHandler(update: Update, context:CallbackContext):
   if "2" in query:
     chatid = update.effective_chat.id
     if boolean_dictionary[chatid] == True:
-      # access todo array if it is present in the dictionary,
-      # else create a new todo array
-      if chatid in todo_dictionary:
-        todo_list = todo_dictionary.get(chatid)
-      else:
-        todo_list = [(0, 'To-do List:')]
-        todo_dictionary[chatid] = todo_list
+      # access todo array
+      user = db.child('tasklist').child(f'{chatid}').get()
+      todo_list = user.val()
 
       # add the new task to the todo array
       todo_list.append((2, '(⭐⭐⭐⭐)\n' + f'    {task_name}'))
@@ -324,13 +318,9 @@ def queryHandler(update: Update, context:CallbackContext):
   if "3" in query:
     chatid = update.effective_chat.id
     if boolean_dictionary[chatid] == True:
-      # access todo array if it is present in the dictionary,
-      # else create a new todo array
-      if chatid in todo_dictionary:
-        todo_list = todo_dictionary.get(chatid)
-      else:
-        todo_list = [(0, 'To-do List:')]
-        todo_dictionary[chatid] = todo_list
+      # access todo array
+      user = db.child('tasklist').child(f'{chatid}').get()
+      todo_list = user.val()
 
       # add the new task to the todo array
       todo_list.append((3, '(⭐⭐⭐)\n' + f'    {task_name}'))
@@ -348,13 +338,9 @@ def queryHandler(update: Update, context:CallbackContext):
   if "4" in query:
     chatid = update.effective_chat.id
     if boolean_dictionary[chatid] == True:
-      # access todo array if it is present in the dictionary,
-      # else create a new todo array
-      if chatid in todo_dictionary:
-        todo_list = todo_dictionary.get(chatid)
-      else:
-        todo_list = [(0, 'To-do List:')]
-        todo_dictionary[chatid] = todo_list
+      # access todo array
+      user = db.child('tasklist').child(f'{chatid}').get()
+      todo_list = user.val()
 
       # add the new task to the todo array
       todo_list.append((4, '(⭐⭐)\n' + f'    {task_name}'))
@@ -372,13 +358,9 @@ def queryHandler(update: Update, context:CallbackContext):
   if "5" in query:
     chatid = update.effective_chat.id
     if boolean_dictionary[chatid] == True:
-      # access todo array if it is present in the dictionary,
-      # else create a new todo array
-      if chatid in todo_dictionary:
-        todo_list = todo_dictionary.get(chatid)
-      else:
-        todo_list = [(0, 'To-do List:')]
-        todo_dictionary[chatid] = todo_list
+      # access todo array
+      user = db.child('tasklist').child(f'{chatid}').get()
+      todo_list = user.val()
 
       # add the new task to the todo array
       todo_list.append((5, '(⭐)\n' + f'    {task_name}'))
@@ -396,13 +378,9 @@ def queryHandler(update: Update, context:CallbackContext):
   if "6" in query:
     chatid = update.effective_chat.id
     if boolean_dictionary[chatid] == True:
-      # access todo array if it is present in the dictionary,
-      # else create a new todo array
-      if chatid in todo_dictionary:
-        todo_list = todo_dictionary.get(chatid)
-      else:
-        todo_list = [(0, 'To-do List:')]
-        todo_dictionary[chatid] = todo_list
+      # access todo array
+      user = db.child('tasklist').child(f'{chatid}').get()
+      todo_list = user.val()
 
       # add the new task to the todo array
       todo_list.append((10, '(Misc)\n' +  f'{task_name}'))
