@@ -75,7 +75,9 @@ def show_list(update: Update, context:CallbackContext) -> None:
     str = 'To-do List:\n'
     index = 1
     todo_list = user.val()
+    print(todo_list)
     todo_list.sort(reverse=False)
+    print(todo_list)
     for i in range (0, len(todo_list) - 1):
       str += f'{index}. ' + f'{todo_list[i][1]}\n'
       index += 1
