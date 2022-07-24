@@ -16,14 +16,8 @@ firebaseConfig = {'apiKey': "AIzaSyAs9HemS9WTckbxSofzQvH0_B6SgKKtTfQ",
   'messagingSenderId': "502568196964",
   'appId': "1:502568196964:web:7793a70c695e1c98367871",
   'measurementId': "G-1MDH1DBETP"}
-
 firebase=pyrebase.initialize_app(firebaseConfig)
 
-db=firebase.database()
-
-# trial test push data
-data = {'name':'Denzel', 'age':22}
-db.push(data)
 
 # enable logging
 logging.basicConfig(
@@ -34,6 +28,7 @@ logger = logging.getLogger(__name__)
 
 # global variables
 TOKEN = os.environ['TELETOKEN']
+db=firebase.database()
 todo_dictionary = {"default": "To-do List:"}
 boolean_dictionary = {}
 boolean_messagedict = {}
@@ -105,9 +100,9 @@ def add_task(update: Update, context:CallbackContext):
     boolean_dictionary[chatid] = True
     task_name = f'{task_str}'
 
-    buttons = [[InlineKeyboardButton("Most Important", callback_data="1")], [InlineKeyboardButton("Important", callback_data="2")], 
-    [InlineKeyboardButton("Average", callback_data="3")], [InlineKeyboardButton("Not So Important", callback_data="4")], 
-    [InlineKeyboardButton("Least Important", callback_data="5")], [InlineKeyboardButton("Miscellaneous", callback_data="6")]]
+    buttons = [[InlineKeyboardButton("⭐⭐⭐⭐⭐", callback_data="1")], [InlineKeyboardButton("⭐⭐⭐⭐", callback_data="2")], 
+    [InlineKeyboardButton("⭐⭐⭐", callback_data="3")], [InlineKeyboardButton("⭐⭐", callback_data="4")], 
+    [InlineKeyboardButton("⭐", callback_data="5")], [InlineKeyboardButton("None", callback_data="6")]]
     context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(buttons), text="What is the priority of this task?")
 
 
@@ -230,26 +225,22 @@ def updatetask(int, update: Update, context:CallbackContext):
   text = update.message.text
   text_arr = text.split(' ')
 
-  if len(text_arr) < 1:
-      # show error message if no words are after the command
-      update.message.reply_text('Add your task again by typing /addtask followed by the name of the task in the same message!')
-  else:
-      todo_list = todo_dictionary.get(chatid)
-      todo_list.pop(int)
-      # get the intended task to add as a string stored in task_str
-      task_str = ''
-      for i in range (len(text_arr)):
-        task_str += f'{text_arr[i]} '
+  todo_list = todo_dictionary.get(chatid)
+  todo_list.pop(int)
+  # get the intended task to add as a string stored in task_str
+  task_str = ''
+  for i in range (len(text_arr)):
+    task_str += f'{text_arr[i]} '
 
-      chatid = update.message.chat.id
-      boolean_dictionary[chatid] = True
-      global task_name
-      task_name = f'{task_str}'
+  chatid = update.message.chat.id
+  boolean_dictionary[chatid] = True
+  global task_name
+  task_name = f'{task_str}'
 
-      buttons = [[InlineKeyboardButton("Most Important", callback_data="1")], [InlineKeyboardButton("Important", callback_data="2")], 
-      [InlineKeyboardButton("Average", callback_data="3")], [InlineKeyboardButton("Not So Important", callback_data="4")], 
-      [InlineKeyboardButton("Least Important", callback_data="5")], [InlineKeyboardButton("Miscellaneous", callback_data="6")]]
-      context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(buttons), text="What is the priority of this task?")
+  buttons = [[InlineKeyboardButton("⭐⭐⭐⭐⭐", callback_data="1")], [InlineKeyboardButton("⭐⭐⭐⭐", callback_data="2")], 
+  [InlineKeyboardButton("⭐⭐⭐", callback_data="3")], [InlineKeyboardButton("⭐⭐", callback_data="4")], 
+  [InlineKeyboardButton("⭐", callback_data="5")], [InlineKeyboardButton("None", callback_data="6")]]
+  context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(buttons), text="What is the priority of this task?")
 
 
 def queryHandler(update: Update, context:CallbackContext):
@@ -290,6 +281,8 @@ def queryHandler(update: Update, context:CallbackContext):
       # add the new task to the todo array
       todo_list.append((1, '(⭐⭐⭐⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
+      data = {'taskprio': '(⭐⭐⭐⭐⭐)\n', 'taskname': f'    {task_name}'}
+      db.child(f'{chatid}').set(data)
 
       # show the updated list
       str = f'{todo_list[0][1]}\n'
@@ -315,6 +308,8 @@ def queryHandler(update: Update, context:CallbackContext):
       # add the new task to the todo array
       todo_list.append((2, '(⭐⭐⭐⭐)\n' + f'    {task_name}'))
       todo_list.sort(reverse=False)
+      data = {'taskprio': '(⭐⭐⭐⭐)\n', 'taskname': f'    {task_name}'}
+      db.child(f'{chatid}').set(data)
 
       # show the updated list
       str = f'{todo_list[0][1]}\n'
