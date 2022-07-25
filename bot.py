@@ -74,7 +74,7 @@ def show_list(update: Update, context:CallbackContext) -> None:
   if user.val() != None:
     str = 'To-do List:\n'
     index = 1
-    todo_list = user.val()
+    print(user.val())
     for task in user.each():
       print(task.val())
 
