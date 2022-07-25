@@ -89,7 +89,7 @@ def show_list(update: Update, context:CallbackContext) -> None:
     todo_list.sort(reverse=False)
 
     for i in range (0, len(todo_list)):
-      str += f'{index}. ' + f'{todo_list[i][1]}\n'
+      str += f'{index}. '
       for j in range (1, len(todo_list[i])):
         str += f'{todo_list[i][j]}\n'
         index += 1
@@ -324,7 +324,7 @@ def addremark(update: Update, context: CallbackContext):
   global remark
   remark = f'{remarks_str}'
 
-  data = {'remarks': f'    {remarks_str}'}
+  data = {'remarks': f'    -{remarks_str}'}
   db.child('tasklist').child(f'{chatid}').child(remarkskey).update(data)
 
 
