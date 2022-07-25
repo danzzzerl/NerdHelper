@@ -6,6 +6,7 @@ from telegram import *
 from telegram.ext import *
 from threading import Timer
 import pyrebase
+import datetime
 
 PORT = int(os.environ.get('PORT', 5000))
 
@@ -475,6 +476,10 @@ def prompts(update: Update, context: CallbackContext):
 
 
 def main() -> None:
+  nowtime = datetime.now()
+  if nowtime.hour() == 15 and nowtime.minute() == 55:
+    print('reminder time works')
+    
   updater = Updater(token= TOKEN, use_context=True)
 
   dispatcher = updater.dispatcher
