@@ -129,20 +129,33 @@ def done_task(update: Update, context:CallbackContext) -> None:
     # remove the task from the list
     number = int(numbers[0])
     user = db.child('tasklist').child(f'{chatid}').get()
-    if any(user.val()):
-      todo_list = user.val()
-      try:
-        while True:
-          todo_list.remove(None)
-      except ValueError:
-        pass
+    if user.val() != None:
+      todo_list = []
+      for task in user.each():
+        todo_list.append((task.val().get('priority'), task.val().get('task')))
+    
       todo_list.sort(reverse=False)
-      todo_list.pop(number)
-    else:
-       update.message.reply_text('Enter a valid task number to delete the task!')
 
-    # show the updated list
-    return show_list(update, context)
+      deletevalue = ''
+      if 0 <= number <= (len(todo_list) - 1):
+        index = number - 1
+        deletevalue = todo_list[index][1]
+        print(deletevalue)
+      else:
+        update.message.reply_text('Put in a valid task number!')
+
+      deletekey = ''
+      for task in user.each():
+        if task.val().get('task') == deletevalue:
+          deletekey = task.key()
+          print(deletekey)
+          db.child('tasklist').child(f'{chatid}').child(deletekey).remove()
+
+      # show the updated list
+      return show_list(update, context)
+      
+    else:
+       update.message.reply_text('Your list is empty!')
 
 
 def create_new(update: Update, context:CallbackContext):
