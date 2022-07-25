@@ -118,13 +118,14 @@ def add_task(update: Update, context:CallbackContext):
 def done_task(update: Update, context:CallbackContext) -> None:
   text = update.message.text
   numbers = text.split(' ')[1:]
+  number = int(numbers[0])
 
-  if len(numbers) == 1  and isinstance(numbers, int):
+
+  if len(numbers) == 1  and isinstance(number, int):
         # update chat id
     chatid = update.message.chat.id
 
     # remove the task from the list
-    number = int(numbers[0])
     user = db.child('tasklist').child(f'{chatid}').get()
     if user.val() != None:
       todo_list = []
