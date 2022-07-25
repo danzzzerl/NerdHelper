@@ -221,26 +221,43 @@ def reminder_command(update: Update, context: CallbackContext):
 def task_update(update: Update, context:CallbackContext) -> None:
   text = update.message.text
   numbers = text.split(' ')[1:]
+  number = int(numbers[0])
 
-  if len(numbers) != 1:
-    # show error message if there is more or less than 1 number after the command
-    update.message.reply_text('Update your task again by typing /updatetask followed by the number of the task that you want to change!')
-  else:
+  if len(numbers) == 1  and isinstance(number, int):
     # update chat id
     chatid = update.message.chat.id
 
-    # access todo array
-    todo_list = todo_dictionary.get(chatid)
-
     # remove the task from the list
-    number = int(numbers[0])
-    if (number > (len(todo_list) - 1)) or (number < 1):
-      update.message.reply_text('Repeat command with a valid number to successfully update the task!')
+    user = db.child('tasklist').child(f'{chatid}').get()
+    if user.val() != None:
+      todo_list = []
+      for task in user.each():
+        todo_list.append((task.val().get('priority'), task.val().get('task')))
+    
+      todo_list.sort(reverse=False)
+
+      deletevalue = ''
+      if 0 <= number <= len(todo_list):
+        index = number - 1
+        deletevalue = todo_list[index][1]
+
+        deletekey = ''
+        for task in user.each():
+          if task.val().get('task') == deletevalue:
+            deletekey = task.key()
+            db.child('tasklist').child(f'{chatid}').child(deletekey).remove()
+
+        update.message.reply_text('What do you want to rename/update this task to?')
+        boolean_messagedict[chatid] = True
+        
+      else:
+        update.message.reply_text('Put in a valid task number!')
+
     else:
-      global UpdatableNumber
-      UpdatableNumber = number
-      update.message.reply_text('What do you want to rename/update this task to?')
-      boolean_messagedict[chatid] = True
+       update.message.reply_text('Your list is empty!')
+
+  else:
+    update.message.reply_text('Remove your task again by typing /donetask followed by the number of the task it corresponds to!')
 
 
 def updatetask(int, update: Update, context:CallbackContext):
@@ -248,15 +265,12 @@ def updatetask(int, update: Update, context:CallbackContext):
   text = update.message.text
   text_arr = text.split(' ')
 
-  todo_list = todo_dictionary.get(chatid)
-  todo_list.pop(int)
   # get the intended task to add as a string stored in task_str
   task_str = ''
   for i in range (len(text_arr)):
     task_str += f'{text_arr[i]} '
 
-  chatid = update.message.chat.id
-  boolean_dictionary[chatid] = True
+  # boolean_dictionary[chatid] = True
   global task_name
   task_name = f'{task_str}'
 
