@@ -118,9 +118,10 @@ def add_task(update: Update, context:CallbackContext):
 def done_task(update: Update, context:CallbackContext) -> None:
   text = update.message.text
   numbers = text.split(' ')[1:]
-  number = int(numbers[0])
 
-  if len(numbers) == 1  and isinstance(number, int):
+  if len(numbers) == 1 and isinstance(int(numbers[0]), int):
+    number = int(numbers[0])
+
     # update chat id
     chatid = update.message.chat.id
 
@@ -217,13 +218,12 @@ def reminder_command(update: Update, context: CallbackContext):
       pass
 
 
-
 def task_update(update: Update, context:CallbackContext) -> None:
   text = update.message.text
   numbers = text.split(' ')[1:]
-  number = int(numbers[0])
 
-  if len(numbers) == 1  and isinstance(number, int):
+  if len(numbers) == 1  and isinstance(int(numbers[0]), int):
+    number = int(numbers[0])
     # update chat id
     chatid = update.message.chat.id
 
