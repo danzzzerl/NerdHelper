@@ -327,6 +327,8 @@ def addremark(update: Update, context: CallbackContext):
   data = {'remarks': f'    - {remarks_str}'}
   db.child('tasklist').child(f'{chatid}').child(remarkskey).update(data)
 
+  return show_list(update, context)
+
 
 def queryHandler(update: Update, context:CallbackContext):
   query = update.callback_query.data
