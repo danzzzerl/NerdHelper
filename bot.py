@@ -270,7 +270,7 @@ def updatetask(int, update: Update, context:CallbackContext):
   for i in range (len(text_arr)):
     task_str += f'{text_arr[i]} '
 
-  # boolean_dictionary[chatid] = True
+  boolean_dictionary[chatid] = True
   global task_name
   task_name = f'{task_str}'
 
