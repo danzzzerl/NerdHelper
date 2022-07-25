@@ -71,25 +71,16 @@ def show_list(update: Update, context:CallbackContext) -> None:
   chatid = update.message.chat.id
   user = db.child('tasklist').child(f'{chatid}').get()
 
-  if any(user.val()):
+  if user.val() != None:
     str = 'To-do List:\n'
     index = 1
     todo_list = user.val()
-    try:
-      while True:
-        todo_list.remove(None)
-    except ValueError:
-      pass
-    todo_list.sort(reverse=False)
-    for i in range (0, len(todo_list) - 1):
-      str += f'{index}. ' + f'{todo_list[i][1]}\n'
-      index += 1
+    for task in user.each():
+      print(task.val())
 
     update.message.reply_text(f'{str}')
     
   else:
-    data = {'tasklist': [(0, 'To-do List:')]}
-    db.child(f'{chatid}').set(data)
     defaultPrintable = todo_dictionary.get("default")
     boolean_dictionary[chatid] = True
     update.message.reply_text("To-do List:")
