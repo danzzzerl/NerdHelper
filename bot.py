@@ -92,7 +92,7 @@ def show_list(update: Update, context:CallbackContext) -> None:
       str += f'{index}. '
       for j in range (1, len(todo_list[i])):
         str += f'{todo_list[i][j]}\n'
-        index += 1
+      index += 1
     update.message.reply_text(f'{str}')
     
   else:
@@ -324,7 +324,7 @@ def addremark(update: Update, context: CallbackContext):
   global remark
   remark = f'{remarks_str}'
 
-  data = {'remarks': f'    -{remarks_str}'}
+  data = {'remarks': f'    - {remarks_str}'}
   db.child('tasklist').child(f'{chatid}').child(remarkskey).update(data)
 
 
