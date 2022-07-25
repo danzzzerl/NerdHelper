@@ -281,15 +281,13 @@ def queryHandler(update: Update, context:CallbackContext):
   if "1" in query:
     chatid = update.effective_chat.id
     if boolean_dictionary[chatid] == True:
-     # access todo array
-      user = db.child('tasklist').child(f'{chatid}').get()
-      todo_list = user.val()
-
-      # add the new task to the todo array
+    # add the new task to the todo array
       data = {'priority': 1, 'task': '(⭐⭐⭐⭐⭐)\n' + f'    {task_name}'}
       db.child('tasklist').child(f'{chatid}').push(data) 
 
       # show list
+      user = db.child('tasklist').child(f'{chatid}').get()
+      todo_list = user.val()
       str = 'To-do List:\n'
       index = 1
       todo_list = []
@@ -310,15 +308,13 @@ def queryHandler(update: Update, context:CallbackContext):
   if "2" in query:
     chatid = update.effective_chat.id
     if boolean_dictionary[chatid] == True:
-      # access todo array
-      user = db.child('tasklist').child(f'{chatid}').get()
-      todo_list = user.val()
-
-      # add the new task to the todo array
+     # add the new task to the todo array
       data = {'priority': 2, 'task': '(⭐⭐⭐⭐)\n' + f'    {task_name}'}
       db.child('tasklist').child(f'{chatid}').push(data) 
 
       # show list
+      user = db.child('tasklist').child(f'{chatid}').get()
+      todo_list = user.val()
       str = 'To-do List:\n'
       index = 1
       todo_list = []
@@ -339,15 +335,13 @@ def queryHandler(update: Update, context:CallbackContext):
   if "3" in query:
     chatid = update.effective_chat.id
     if boolean_dictionary[chatid] == True:
-      # access todo array
-      user = db.child('tasklist').child(f'{chatid}').get()
-      todo_list = user.val()
-
-      # add the new task to the todo array
+     # add the new task to the todo array
       data = {'priority': 3, 'task': '(⭐⭐⭐)\n' + f'    {task_name}'}
       db.child('tasklist').child(f'{chatid}').push(data) 
 
       # show list
+      user = db.child('tasklist').child(f'{chatid}').get()
+      todo_list = user.val()
       str = 'To-do List:\n'
       index = 1
       todo_list = []
@@ -368,15 +362,13 @@ def queryHandler(update: Update, context:CallbackContext):
   if "4" in query:
     chatid = update.effective_chat.id
     if boolean_dictionary[chatid] == True:
-      # access todo array
-      user = db.child('tasklist').child(f'{chatid}').get()
-      todo_list = user.val()
-
-      # add the new task to the todo array
+     # add the new task to the todo array
       data = {'priority': 4, 'task': '(⭐⭐)\n' + f'    {task_name}'}
       db.child('tasklist').child(f'{chatid}').push(data)  
 
       # show list
+      user = db.child('tasklist').child(f'{chatid}').get()
+      todo_list = user.val()
       str = 'To-do List:\n'
       index = 1
       todo_list = []
@@ -397,15 +389,13 @@ def queryHandler(update: Update, context:CallbackContext):
   if "5" in query:
     chatid = update.effective_chat.id
     if boolean_dictionary[chatid] == True:
-      # access todo array
-      user = db.child('tasklist').child(f'{chatid}').get()
-      todo_list = user.val()
-
-      # add the new task to the todo array
+     # add the new task to the todo array
       data = {'priority': 5, 'task': '(⭐)\n' + f'    {task_name}'}
       db.child('tasklist').child(f'{chatid}').push(data)  
 
       # show list
+      user = db.child('tasklist').child(f'{chatid}').get()
+      todo_list = user.val()
       str = 'To-do List:\n'
       index = 1
       todo_list = []
@@ -426,15 +416,13 @@ def queryHandler(update: Update, context:CallbackContext):
   if "6" in query:
     chatid = update.effective_chat.id
     if boolean_dictionary[chatid] == True:
-      # access todo array
-      user = db.child('tasklist').child(f'{chatid}').get()
-      todo_list = user.val()
-
-      # add the new task to the todo array
+     # add the new task to the todo array
       data = {'priority': 5, 'task': '(Misc)\n' + f'    {task_name}'}
       db.child('tasklist').child(f'{chatid}').push(data)  
 
       # show list
+      user = db.child('tasklist').child(f'{chatid}').get()
+      todo_list = user.val()
       str = 'To-do List:\n'
       index = 1
       todo_list = []
