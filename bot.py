@@ -1,3 +1,4 @@
+from ast import Call
 from audioop import reverse
 import logging
 import os
@@ -34,10 +35,13 @@ db=firebase.database()
 todo_dictionary = {"default": "To-do List:"}
 boolean_dictionary = {}
 boolean_messagedict = {}
+boolean_remarks = {}
 chatid = 0
 task_name = ''
-UpdatableNumber = 0
 timerObject = Timer
+remarksval = ''
+remarkskey = ''
+remark = ''
 
 
 def start_command(update: Update, _: CallbackContext) -> None:
@@ -78,6 +82,10 @@ def show_list(update: Update, context:CallbackContext) -> None:
     todo_list = []
     for task in user.each():
       todo_list.append((task.val().get('priority'), task.val().get('task')))
+      if task.val().get('remarks') is None:
+        pass
+      else:
+        todo_list.append((task.val().get('priority'), task.val().get('remarks')))
     
     todo_list.sort(reverse=False)
 
@@ -197,28 +205,6 @@ def end_timer(update: Update, context: CallbackContext):
   update.message.reply_text('❗️ Timer cancelled! ❗️')
 
 
-def reminder_command(update: Update, context: CallbackContext):
-  text = update.message.text
-  numbers = text.split(' ')[1:]
-
-  if len(numbers) != 1:
-    # show error message if there is more or less than 1 number after the command
-    update.message.reply_text('Select your task for reminder again by typing /reminder followed by the number of the task it corresponds to!')
-  else:
-    # update chat id
-    chatid = update.message.chat.id
-
-    # access todo array
-    todo_list = todo_dictionary.get(chatid)
-
-    # add the reminder
-    number = int(numbers[0])
-    if (number > (len(todo_list) - 1)) or (number < 1):
-      update.message.reply_text('Repeat command with a valid number to successfully complete task!')
-    else:
-      pass
-
-
 def task_update(update: Update, context:CallbackContext) -> None:
   text = update.message.text
   numbers = text.split(' ')[1:]
@@ -261,7 +247,7 @@ def task_update(update: Update, context:CallbackContext) -> None:
     update.message.reply_text('Remove your task again by typing /donetask followed by the number of the task it corresponds to!')
 
 
-def updatetask(int, update: Update, context:CallbackContext):
+def updatetask(update: Update, context:CallbackContext):
   chatid = update.message.chat.id
   text = update.message.text
   text_arr = text.split(' ')
@@ -279,6 +265,65 @@ def updatetask(int, update: Update, context:CallbackContext):
   [InlineKeyboardButton("⭐⭐⭐", callback_data="3")], [InlineKeyboardButton("⭐⭐", callback_data="4")], 
   [InlineKeyboardButton("⭐", callback_data="5")], [InlineKeyboardButton("None", callback_data="6")]]
   context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(buttons), text="What is the priority of this task?")
+
+
+def add_remarks(update: Update, context:CallbackContext):
+  text = update.message.text
+  numbers = text.split(' ')[1:]
+
+  if len(numbers) == 1  and isinstance(int(numbers[0]), int):
+    number = int(numbers[0])
+    # update chat id
+    chatid = update.message.chat.id
+
+    # select the task from the list
+    user = db.child('tasklist').child(f'{chatid}').get()
+    if user.val() != None:
+      todo_list = []
+      for task in user.each():
+        todo_list.append((task.val().get('priority'), task.val().get('task')))
+    
+      todo_list.sort(reverse=False)
+
+      global remarksval
+      if 1 <= number <= len(todo_list):
+        index = number - 1
+        remarksval = todo_list[index][1]
+
+        global remarkskey
+        for task in user.each():
+          if task.val().get('task') == remarksval:
+            remarkskey = task.key()
+
+        update.message.reply_text('What remarks do you want to add to this task?')
+        boolean_remarks[chatid] = True
+        
+      else:
+        update.message.reply_text('Put in a valid task number!')
+
+    else:
+       update.message.reply_text('Your list is empty!')
+
+  else:
+    update.message.reply_text('Add remarks to your task again by typing /remarks followed by the number of the task it corresponds to!')
+
+
+def addremark(update: Update, context: CallbackContext):
+  chatid = update.message.chat.id
+  text = update.message.text
+  text_arr = text.split(' ')
+
+  # get the intended remark to add as a string stored in remarks_str
+  remarks_str = ''
+  for i in range (len(text_arr)):
+    remarks_str += f'{text_arr[i]} '
+
+  boolean_dictionary[chatid] = True
+  global remark
+  remark = f'{remarks_str}'
+
+  data = {'remarks': f'    {remarks_str}'}
+  db.child('tasklist').child(f'{chatid}').push(data)
 
 
 def queryHandler(update: Update, context:CallbackContext):
@@ -469,10 +514,16 @@ def queryHandler(update: Update, context:CallbackContext):
 def prompts(update: Update, context: CallbackContext):
     chatid = update.effective_chat.id
     if boolean_messagedict[chatid] == True:
-        return updatetask(UpdatableNumber, update, context)
-        boolean_messagedict[chatid] = False
+      boolean_messagedict[chatid] = False
+      return updatetask(update, context)
     else:
-        pass
+      pass
+
+    if boolean_remarks[chatid] == True:
+      boolean_remarks[chatid] == False
+      return addremark(update, context)
+    else:
+      pass
 
 
 def main() -> None:
@@ -488,8 +539,8 @@ def main() -> None:
   dispatcher.add_handler(CommandHandler('newlist', create_new))
   dispatcher.add_handler(CommandHandler('starttimer', start_timer))
   dispatcher.add_handler(CommandHandler('endtimer', end_timer))
-  dispatcher.add_handler(CommandHandler('reminder', reminder_command))
   dispatcher.add_handler(CommandHandler('updatetask', task_update))
+  dispatcher.add_handler(CommandHandler('remarks', add_remarks))
 
   dispatcher.add_handler(MessageHandler(Filters.text, prompts))
 
