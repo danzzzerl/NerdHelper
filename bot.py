@@ -61,10 +61,12 @@ def help_command(update: Update, _:CallbackContext) -> None:
         '/start to start the bot\n\n' 
         '/addtask followed by your task to add your new task\n\n' + 
         '/donetask followed by the number of that task on the list to remove that task.\n\n' + 
+        '/remark followed by the number of the task to add a remark to your task\n' + 
+        '- IMPORTANT NOTE: currently, each task can only store one remark and adding a remark to the same task which already has a remark would replace it with the latest remark!\n\n' + 
+        '/updatetask followed by the number of the task to change/update the task' + 
         '/list to view your current to-do list\n\n' + 
         '/newlist to delete your current list and start a new one\n\n' +
-        '/reminder to set a reminder for a specific task at a specific date \n\n'
-        '/starttimer to start a customisable timer\n' +
+        '/starttimer to start a customisable timer and\n/endtimer to force quit it\n' +
         '- this is just a regular timer that will send a message when the timer is up!\n' +
         '- according to the Pomodoro technique, the recommended timer for doing a task is 25 minutes per session! For more information on this technique, please go to https://todoist.com/productivity-methods/pomodoro-technique \n\n' +
         '/help to look at the bot commands again!'
@@ -268,7 +270,7 @@ def updatetask(update: Update, context:CallbackContext):
   context.bot.send_message(chat_id=update.effective_chat.id, reply_markup=InlineKeyboardMarkup(buttons), text="What is the priority of this task?")
 
 
-def add_remarks(update: Update, context:CallbackContext):
+def add_remark(update: Update, context:CallbackContext):
   text = update.message.text
   numbers = text.split(' ')[1:]
 
@@ -541,7 +543,7 @@ def main() -> None:
   dispatcher.add_handler(CommandHandler('starttimer', start_timer))
   dispatcher.add_handler(CommandHandler('endtimer', end_timer))
   dispatcher.add_handler(CommandHandler('updatetask', task_update))
-  dispatcher.add_handler(CommandHandler('remarks', add_remarks))
+  dispatcher.add_handler(CommandHandler('remark', add_remark))
 
   dispatcher.add_handler(MessageHandler(Filters.text, prompts))
 
