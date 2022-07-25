@@ -291,24 +291,25 @@ def queryHandler(update: Update, context:CallbackContext):
       todo_list = user.val()
 
       # add the new task to the todo array
-      db.child('tasklist').child(f'{chatid}').set(todo_list) 
+      data = {'priority': 1, 'task': '(⭐⭐⭐⭐⭐)\n' + f'    {task_name}'}
+      db.child('tasklist').child(f'{chatid}').push(data) 
 
       # show the updated list
-      str = 'To-do List:\n'
-      index = 1
-      todo_list = user.val()
-      try:
-        while True:
-          todo_list.remove(None)
-      except ValueError:
-        pass
-      todo_list.append([1, '(⭐⭐⭐⭐⭐)\n' + f'    {task_name}'])
-      todo_list.sort(reverse=False)
-      for i in range (0, len(todo_list) - 1):
-        str += f'{index}. ' + f'{todo_list[i][1]}\n'
-        index += 1
+      # str = 'To-do List:\n'
+      # index = 1
+      # todo_list = user.val()
+      # try:
+      #   while True:
+      #     todo_list.remove(None)
+      # except ValueError:
+      #   pass
+      # todo_list.append([1, '(⭐⭐⭐⭐⭐)\n' + f'    {task_name}'])
+      # todo_list.sort(reverse=False)
+      # for i in range (0, len(todo_list) - 1):
+      #   str += f'{index}. ' + f'{todo_list[i][1]}\n'
+      #   index += 1
 
-      context.bot.send_message(chat_id=chatid, text=f'{str}')
+      # context.bot.send_message(chat_id=chatid, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
@@ -322,24 +323,25 @@ def queryHandler(update: Update, context:CallbackContext):
       todo_list = user.val()
 
       # add the new task to the todo array
-      db.child('tasklist').child(f'{chatid}').set(todo_list) 
+      data = {'priority': 2, 'task': '(⭐⭐⭐⭐)\n' + f'    {task_name}'}
+      db.child('tasklist').child(f'{chatid}').push(data) 
 
       # show the updated list
-      str = 'To-do List:\n'
-      index = 1
-      todo_list = user.val()
-      try:
-        while True:
-          todo_list.remove(None)
-      except ValueError:
-        pass
-      todo_list.append([2, '(⭐⭐⭐⭐)\n' + f'    {task_name}'])
-      todo_list.sort(reverse=False)
-      for i in range (0, len(todo_list) - 1):
-        str += f'{index}. ' + f'{todo_list[i][1]}\n'
-        index += 1
+      # str = 'To-do List:\n'
+      # index = 1
+      # todo_list = user.val()
+      # try:
+      #   while True:
+      #     todo_list.remove(None)
+      # except ValueError:
+      #   pass
+      # todo_list.append([2, '(⭐⭐⭐⭐)\n' + f'    {task_name}'])
+      # todo_list.sort(reverse=False)
+      # for i in range (0, len(todo_list) - 1):
+      #   str += f'{index}. ' + f'{todo_list[i][1]}\n'
+      #   index += 1
 
-      context.bot.send_message(chat_id=chatid, text=f'{str}')
+      # context.bot.send_message(chat_id=chatid, text=f'{str}')
 
 
       # set boolean to False to prevent multiple clicks of button
@@ -354,22 +356,23 @@ def queryHandler(update: Update, context:CallbackContext):
       todo_list = user.val()
 
       # add the new task to the todo array
-      db.child('tasklist').child(f'{chatid}').set(todo_list) 
+      data = {'priority': 3, 'task': '(⭐⭐⭐)\n' + f'    {task_name}'}
+      db.child('tasklist').child(f'{chatid}').push(data) 
 
       # show the updated list
-      str = 'To-do List:\n'
-      index = 1
-      todo_list = user.val()
-      try:
-        while True:
-          todo_list.remove(None)
-      except ValueError:
-        pass
-      todo_list.append([3, '(⭐⭐⭐)\n' + f'    {task_name}'])
-      todo_list.sort(reverse=False)
-      for i in range (0, len(todo_list) - 1):
-        str += f'{index}. ' + f'{todo_list[i][1]}\n'
-        index += 1
+      # str = 'To-do List:\n'
+      # index = 1
+      # todo_list = user.val()
+      # try:
+      #   while True:
+      #     todo_list.remove(None)
+      # except ValueError:
+      #   pass
+      # todo_list.append([3, '(⭐⭐⭐)\n' + f'    {task_name}'])
+      # todo_list.sort(reverse=False)
+      # for i in range (0, len(todo_list) - 1):
+      #   str += f'{index}. ' + f'{todo_list[i][1]}\n'
+      #   index += 1
 
       context.bot.send_message(chat_id=chatid, text=f'{str}')
 
