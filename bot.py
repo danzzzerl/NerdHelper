@@ -301,7 +301,7 @@ def queryHandler(update: Update, context:CallbackContext):
       for i in range (0, len(todo_list)):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
         index += 1
-      update.message.reply_text(f'{str}')
+      context.bot.send_message(chatid, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
@@ -330,7 +330,7 @@ def queryHandler(update: Update, context:CallbackContext):
       for i in range (0, len(todo_list)):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
         index += 1
-      update.message.reply_text(f'{str}')
+      context.bot.send_message(chatid, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
@@ -359,7 +359,7 @@ def queryHandler(update: Update, context:CallbackContext):
       for i in range (0, len(todo_list)):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
         index += 1
-      update.message.reply_text(f'{str}')
+      context.bot.send_message(chatid, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
@@ -388,7 +388,7 @@ def queryHandler(update: Update, context:CallbackContext):
       for i in range (0, len(todo_list)):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
         index += 1
-      update.message.reply_text(f'{str}')
+      context.bot.send_message(chatid, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
@@ -417,7 +417,7 @@ def queryHandler(update: Update, context:CallbackContext):
       for i in range (0, len(todo_list)):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
         index += 1
-      update.message.reply_text(f'{str}')
+      context.bot.send_message(chatid, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
@@ -446,7 +446,7 @@ def queryHandler(update: Update, context:CallbackContext):
       for i in range (0, len(todo_list)):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
         index += 1
-      update.message.reply_text(f'{str}')
+      context.bot.send_message(chatid, text=f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
