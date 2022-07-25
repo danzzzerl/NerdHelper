@@ -78,7 +78,6 @@ def show_list(update: Update, context:CallbackContext) -> None:
     for task in user.each():
       todo_list.append((task.val().get('priority'), task.val().get('task')))
     
-    print(todo_list)
     todo_list.sort(reverse=False)
 
     for i in range (0, len(todo_list)):
@@ -87,7 +86,6 @@ def show_list(update: Update, context:CallbackContext) -> None:
     update.message.reply_text(f'{str}')
     
   else:
-    defaultPrintable = todo_dictionary.get("default")
     boolean_dictionary[chatid] = True
     update.message.reply_text("To-do List:")
 
@@ -291,22 +289,19 @@ def queryHandler(update: Update, context:CallbackContext):
       data = {'priority': 1, 'task': '(⭐⭐⭐⭐⭐)\n' + f'    {task_name}'}
       db.child('tasklist').child(f'{chatid}').push(data) 
 
-      # show the updated list
-      # str = 'To-do List:\n'
-      # index = 1
-      # todo_list = user.val()
-      # try:
-      #   while True:
-      #     todo_list.remove(None)
-      # except ValueError:
-      #   pass
-      # todo_list.append([1, '(⭐⭐⭐⭐⭐)\n' + f'    {task_name}'])
-      # todo_list.sort(reverse=False)
-      # for i in range (0, len(todo_list) - 1):
-      #   str += f'{index}. ' + f'{todo_list[i][1]}\n'
-      #   index += 1
+      # show list
+      str = 'To-do List:\n'
+      index = 1
+      todo_list = []
+      for task in user.each():
+        todo_list.append((task.val().get('priority'), task.val().get('task')))
+    
+      todo_list.sort(reverse=False)
 
-      # context.bot.send_message(chat_id=chatid, text=f'{str}')
+      for i in range (0, len(todo_list)):
+        str += f'{index}. ' + f'{todo_list[i][1]}\n'
+        index += 1
+      update.message.reply_text(f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
@@ -323,23 +318,19 @@ def queryHandler(update: Update, context:CallbackContext):
       data = {'priority': 2, 'task': '(⭐⭐⭐⭐)\n' + f'    {task_name}'}
       db.child('tasklist').child(f'{chatid}').push(data) 
 
-      # show the updated list
-      # str = 'To-do List:\n'
-      # index = 1
-      # todo_list = user.val()
-      # try:
-      #   while True:
-      #     todo_list.remove(None)
-      # except ValueError:
-      #   pass
-      # todo_list.append([2, '(⭐⭐⭐⭐)\n' + f'    {task_name}'])
-      # todo_list.sort(reverse=False)
-      # for i in range (0, len(todo_list) - 1):
-      #   str += f'{index}. ' + f'{todo_list[i][1]}\n'
-      #   index += 1
+      # show list
+      str = 'To-do List:\n'
+      index = 1
+      todo_list = []
+      for task in user.each():
+        todo_list.append((task.val().get('priority'), task.val().get('task')))
+    
+      todo_list.sort(reverse=False)
 
-      # context.bot.send_message(chat_id=chatid, text=f'{str}')
-
+      for i in range (0, len(todo_list)):
+        str += f'{index}. ' + f'{todo_list[i][1]}\n'
+        index += 1
+      update.message.reply_text(f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
@@ -356,22 +347,19 @@ def queryHandler(update: Update, context:CallbackContext):
       data = {'priority': 3, 'task': '(⭐⭐⭐)\n' + f'    {task_name}'}
       db.child('tasklist').child(f'{chatid}').push(data) 
 
-      # show the updated list
-      # str = 'To-do List:\n'
-      # index = 1
-      # todo_list = user.val()
-      # try:
-      #   while True:
-      #     todo_list.remove(None)
-      # except ValueError:
-      #   pass
-      # todo_list.append([3, '(⭐⭐⭐)\n' + f'    {task_name}'])
-      # todo_list.sort(reverse=False)
-      # for i in range (0, len(todo_list) - 1):
-      #   str += f'{index}. ' + f'{todo_list[i][1]}\n'
-      #   index += 1
+      # show list
+      str = 'To-do List:\n'
+      index = 1
+      todo_list = []
+      for task in user.each():
+        todo_list.append((task.val().get('priority'), task.val().get('task')))
+    
+      todo_list.sort(reverse=False)
 
-      context.bot.send_message(chat_id=chatid, text=f'{str}')
+      for i in range (0, len(todo_list)):
+        str += f'{index}. ' + f'{todo_list[i][1]}\n'
+        index += 1
+      update.message.reply_text(f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
@@ -385,24 +373,22 @@ def queryHandler(update: Update, context:CallbackContext):
       todo_list = user.val()
 
       # add the new task to the todo array
-      db.child('tasklist').child(f'{chatid}').set(todo_list) 
+      data = {'priority': 4, 'task': '(⭐⭐)\n' + f'    {task_name}'}
+      db.child('tasklist').child(f'{chatid}').push(data)  
 
-      # show the updated list
+      # show list
       str = 'To-do List:\n'
       index = 1
-      todo_list = user.val()
-      try:
-        while True:
-          todo_list.remove(None)
-      except ValueError:
-        pass
-      todo_list.append([4, '(⭐⭐)\n' + f'    {task_name}'])
+      todo_list = []
+      for task in user.each():
+        todo_list.append((task.val().get('priority'), task.val().get('task')))
+    
       todo_list.sort(reverse=False)
-      for i in range (0, len(todo_list) - 1):
+
+      for i in range (0, len(todo_list)):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
         index += 1
-
-      context.bot.send_message(chat_id=chatid, text=f'{str}')
+      update.message.reply_text(f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
@@ -416,24 +402,22 @@ def queryHandler(update: Update, context:CallbackContext):
       todo_list = user.val()
 
       # add the new task to the todo array
-      db.child('tasklist').child(f'{chatid}').set(todo_list) 
+      data = {'priority': 5, 'task': '(⭐)\n' + f'    {task_name}'}
+      db.child('tasklist').child(f'{chatid}').push(data)  
 
-      # show the updated list
+      # show list
       str = 'To-do List:\n'
       index = 1
-      todo_list = user.val()
-      try:
-        while True:
-          todo_list.remove(None)
-      except ValueError:
-        pass
-      todo_list.append([5, '(⭐)\n' + f'    {task_name}'])
+      todo_list = []
+      for task in user.each():
+        todo_list.append((task.val().get('priority'), task.val().get('task')))
+    
       todo_list.sort(reverse=False)
-      for i in range (0, len(todo_list) - 1):
+
+      for i in range (0, len(todo_list)):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
         index += 1
-
-      context.bot.send_message(chat_id=chatid, text=f'{str}')
+      update.message.reply_text(f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
@@ -447,25 +431,22 @@ def queryHandler(update: Update, context:CallbackContext):
       todo_list = user.val()
 
       # add the new task to the todo array
-      db.child('tasklist').child(f'{chatid}').set(todo_list) 
+      data = {'priority': 5, 'task': '(Misc)\n' + f'    {task_name}'}
+      db.child('tasklist').child(f'{chatid}').push(data)  
 
-      # show the updated list
+      # show list
       str = 'To-do List:\n'
       index = 1
-      todo_list = user.val()
-      try:
-        while True:
-          todo_list.remove(None)
-      except ValueError:
-        pass
-      todo_list.append([10, '(Misc)\n' +  f'    {task_name}'])
-      print(todo_list)
+      todo_list = []
+      for task in user.each():
+        todo_list.append((task.val().get('priority'), task.val().get('task')))
+    
       todo_list.sort(reverse=False)
-      for i in range (0, len(todo_list) - 1):
+
+      for i in range (0, len(todo_list)):
         str += f'{index}. ' + f'{todo_list[i][1]}\n'
         index += 1
-
-      context.bot.send_message(chat_id=chatid, text=f'{str}')
+      update.message.reply_text(f'{str}')
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
