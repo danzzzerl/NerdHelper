@@ -119,11 +119,8 @@ def done_task(update: Update, context:CallbackContext) -> None:
   text = update.message.text
   numbers = text.split(' ')[1:]
 
-  if len(numbers) != 1:
-    # show error message if there is more or less than 1 number after the command
-    update.message.reply_text('Remove your task again by typing /donetask followed by the number of the task it corresponds to!')
-  else:
-    # update chat id
+  if len(numbers) == 1  and isinstance(numbers, int):
+        # update chat id
     chatid = update.message.chat.id
 
     # remove the task from the list
@@ -141,21 +138,26 @@ def done_task(update: Update, context:CallbackContext) -> None:
         index = number - 1
         deletevalue = todo_list[index][1]
         print(deletevalue)
+
+        deletekey = ''
+        for task in user.each():
+          if task.val().get('task') == deletevalue:
+            deletekey = task.key()
+            print(deletekey)
+            db.child('tasklist').child(f'{chatid}').child(deletekey).remove()
+
+        # show the updated list
+        return show_list(update, context)
+        
       else:
         update.message.reply_text('Put in a valid task number!')
 
-      deletekey = ''
-      for task in user.each():
-        if task.val().get('task') == deletevalue:
-          deletekey = task.key()
-          print(deletekey)
-          db.child('tasklist').child(f'{chatid}').child(deletekey).remove()
-
-      # show the updated list
-      return show_list(update, context)
-      
     else:
        update.message.reply_text('Your list is empty!')
+
+  else:
+    update.message.reply_text('Remove your task again by typing /donetask followed by the number of the task it corresponds to!')
+
 
 
 def create_new(update: Update, context:CallbackContext):
