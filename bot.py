@@ -81,17 +81,18 @@ def show_list(update: Update, context:CallbackContext) -> None:
     index = 1
     todo_list = []
     for task in user.each():
-      todo_list.append((task.val().get('priority'), task.val().get('task')))
       if task.val().get('remarks') is None:
-        pass
+        todo_list.append((task.val().get('priority'), task.val().get('task')))
       else:
-        todo_list.append((task.val().get('priority'), task.val().get('remarks')))
+        todo_list.append((task.val().get('priority'), task.val().get('task'), task.val().get('remarks')))
     
     todo_list.sort(reverse=False)
 
     for i in range (0, len(todo_list)):
       str += f'{index}. ' + f'{todo_list[i][1]}\n'
-      index += 1
+      for j in range (1, len(todo_list[i])):
+        str += f'{todo_list[i][j]}\n'
+        index += 1
     update.message.reply_text(f'{str}')
     
   else:
