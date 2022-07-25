@@ -516,11 +516,8 @@ def prompts(update: Update, context: CallbackContext):
     if boolean_messagedict[chatid] == True:
       boolean_messagedict[chatid] = False
       return updatetask(update, context)
-    else:
-      pass
-
-    if boolean_remarks[chatid] == True:
-      boolean_remarks[chatid] == False
+    elif boolean_remarks[chatid] == True:
+      boolean_remarks[chatid] = False
       return addremark(update, context)
     else:
       pass
