@@ -247,7 +247,7 @@ def task_update(update: Update, context:CallbackContext) -> None:
        update.message.reply_text('Your list is empty!')
 
   else:
-    update.message.reply_text('Remove your task again by typing /donetask followed by the number of the task it corresponds to!')
+    update.message.reply_text('Remove your task again by typing /updatetask followed by the number of the task it corresponds to!')
 
 
 def updatetask(update: Update, context:CallbackContext):
@@ -309,7 +309,7 @@ def add_remark(update: Update, context:CallbackContext):
        update.message.reply_text('Your list is empty!')
 
   else:
-    update.message.reply_text('Add remarks to your task again by typing /remarks followed by the number of the task it corresponds to!')
+    update.message.reply_text('Add remarks to your task again by typing /remark followed by the number of the task it corresponds to!')
 
 
 def addremark(update: Update, context: CallbackContext):
