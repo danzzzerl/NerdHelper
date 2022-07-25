@@ -77,12 +77,11 @@ def show_list(update: Update, context:CallbackContext) -> None:
     todo_list = []
     for task in user.each():
       todo_list.append((task.val().get('priority'), task.val().get('task')))
-      print(task.val())
     
     print(todo_list)
     todo_list.sort(reverse=False)
 
-    for i in range (0, len(todo_list - 1)):
+    for i in range (0, len(todo_list) - 1):
       str += f'{index}. ' + f'{todo_list[i][1]}\n'
       index += 1
     update.message.reply_text(f'{str}')
