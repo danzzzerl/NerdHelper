@@ -417,7 +417,7 @@ def queryHandler(update: Update, context:CallbackContext):
     chatid = update.effective_chat.id
     if boolean_dictionary[chatid] == True:
      # add the new task to the todo array
-      data = {'priority': 5, 'task': '(Misc)\n' + f'    {task_name}'}
+      data = {'priority': 10, 'task': '(Misc)\n' + f'    {task_name}'}
       db.child('tasklist').child(f'{chatid}').push(data)  
 
       # show list
