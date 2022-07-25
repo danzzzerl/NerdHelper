@@ -134,7 +134,7 @@ def done_task(update: Update, context:CallbackContext) -> None:
       todo_list.sort(reverse=False)
 
       deletevalue = ''
-      if 0 <= number <= len(todo_list):
+      if 1 <= number <= len(todo_list):
         index = number - 1
         deletevalue = todo_list[index][1]
 
@@ -237,7 +237,7 @@ def task_update(update: Update, context:CallbackContext) -> None:
       todo_list.sort(reverse=False)
 
       deletevalue = ''
-      if 0 <= number <= len(todo_list):
+      if 1 <= number <= len(todo_list):
         index = number - 1
         deletevalue = todo_list[index][1]
 
