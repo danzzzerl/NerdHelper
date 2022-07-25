@@ -2,6 +2,7 @@ APScheduler==3.6.3
 cachetools==4.2.2
 certifi==2022.6.15
 charset-normalizer==2.1.0
+DateTime==4.5
 docopt==0.6.2
 gcloud==0.18.3
 googleapis-common-protos==1.56.4
@@ -31,3 +32,4 @@ tzdata==2022.1
 tzlocal==4.2
 urllib3==1.26.10
 yarg==0.1.9
+zope.interface==5.4.0

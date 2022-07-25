@@ -477,9 +477,9 @@ def prompts(update: Update, context: CallbackContext):
 
 def main() -> None:
   nowtime = datetime.now()
-  if nowtime.hour() == 15 and nowtime.minute() == 55:
+  if nowtime.hour() == 15 and nowtime.minute() == 57:
     print('reminder time works')
-    
+
   updater = Updater(token= TOKEN, use_context=True)
 
   dispatcher = updater.dispatcher
