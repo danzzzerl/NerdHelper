@@ -157,7 +157,6 @@ def done_task(update: Update, context:CallbackContext) -> None:
     update.message.reply_text('Remove your task again by typing /donetask followed by the number of the task it corresponds to!')
 
 
-
 def create_new(update: Update, context:CallbackContext):
   chatid = update.message.chat.id
   boolean_dictionary[chatid] = True
@@ -274,9 +273,8 @@ def queryHandler(update: Update, context:CallbackContext):
   if "yes" in query:
     chatid = update.effective_chat.id
     if boolean_dictionary[chatid] == True:
-      todo_dictionary[chatid] = [(0, 'To-do List:')]
-      defaultPrintable = todo_dictionary.get("default")
-      context.bot.send_message(chat_id=update.effective_chat.id, text=f'{defaultPrintable}')
+      db.child('tasklist').child(f'{chatid}').remove()
+      context.bot.send_message(chat_id=update.effective_chat.id, text="To-do List:")
 
       # set boolean to False to prevent multiple clicks of button
       boolean_dictionary[chatid] = False
