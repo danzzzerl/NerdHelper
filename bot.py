@@ -120,9 +120,8 @@ def done_task(update: Update, context:CallbackContext) -> None:
   numbers = text.split(' ')[1:]
   number = int(numbers[0])
 
-
   if len(numbers) == 1  and isinstance(number, int):
-        # update chat id
+    # update chat id
     chatid = update.message.chat.id
 
     # remove the task from the list
@@ -135,16 +134,14 @@ def done_task(update: Update, context:CallbackContext) -> None:
       todo_list.sort(reverse=False)
 
       deletevalue = ''
-      if 0 <= number <= (len(todo_list) - 1):
+      if 0 <= number <= len(todo_list):
         index = number - 1
         deletevalue = todo_list[index][1]
-        print(deletevalue)
 
         deletekey = ''
         for task in user.each():
           if task.val().get('task') == deletevalue:
             deletekey = task.key()
-            print(deletekey)
             db.child('tasklist').child(f'{chatid}').child(deletekey).remove()
 
         # show the updated list
