@@ -519,6 +519,7 @@ def queryHandler(update: Update, context:CallbackContext):
       
 def prompts(update: Update, context: CallbackContext):
     chatid = update.effective_chat.id
+    print(chatid)
     if boolean_messagedict[chatid] == True:
       boolean_messagedict[chatid] = False
       return updatetask(update, context)
