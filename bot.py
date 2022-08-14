@@ -299,9 +299,7 @@ def add_remark(update: Update, context:CallbackContext):
             remarkskey = task.key()
 
         update.message.reply_text('What remarks do you want to add to this task?')
-        print(chatid)
         boolean_remarks[chatid] = True
-        print(boolean_remarks[chatid])
         boolean_messagedict[chatid] = False
         
       else:
@@ -316,7 +314,6 @@ def add_remark(update: Update, context:CallbackContext):
 
 def addremark(update: Update, context: CallbackContext):
   chatid = update.message.chat.id
-  print(chatid)
   text = update.message.text
   text_arr = text.split(' ')
 
@@ -328,11 +325,10 @@ def addremark(update: Update, context: CallbackContext):
   boolean_dictionary[chatid] = True
   global remark
   remark = f'{remarks_str}'
-  print('works till here 1')
 
   data = {'remarks': f'    - {remarks_str}'}
   db.child('tasklist').child(f'{chatid}').child(remarkskey).update(data)
-  print('works till here 2')
+
   return show_list(update, context)
 
 
@@ -528,6 +524,8 @@ def prompts(update: Update, context: CallbackContext):
       return updatetask(update, context)
     elif boolean_remarks[chatid] == True:
       boolean_remarks[chatid] = False
+      print('working till here')
+      print(chatid)
       return addremark(update, context)
     else:
       pass
