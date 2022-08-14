@@ -299,7 +299,9 @@ def add_remark(update: Update, context:CallbackContext):
             remarkskey = task.key()
 
         update.message.reply_text('What remarks do you want to add to this task?')
+        print(chatid)
         boolean_remarks[chatid] = True
+        print(boolean_remarks[chatid])
         boolean_messagedict[chatid] = False
         
       else:
