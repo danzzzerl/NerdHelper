@@ -524,8 +524,6 @@ def prompts(update: Update, context: CallbackContext):
       return updatetask(update, context)
     elif boolean_remarks[chatid] == True:
       boolean_remarks[chatid] = False
-      print('working till here')
-      print(chatid)
       return addremark(update, context)
     else:
       pass
@@ -547,7 +545,7 @@ def main() -> None:
   dispatcher.add_handler(CommandHandler('updatetask', task_update))
   dispatcher.add_handler(CommandHandler('remark', add_remark))
 
-  dispatcher.add_handler(MessageHandler(Filters.text, prompts))
+  dispatcher.add_handler(MessageHandler((Filters.group or Filters.text), prompts))
 
   dispatcher.add_handler(CallbackQueryHandler(queryHandler))
 
