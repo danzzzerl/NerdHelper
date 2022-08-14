@@ -523,6 +523,7 @@ def prompts(update: Update, context: CallbackContext):
       boolean_messagedict[chatid] = False
       return updatetask(update, context)
     elif boolean_remarks[chatid] == True:
+      print('works here')
       boolean_remarks[chatid] = False
       return addremark(update, context)
     else:
@@ -545,7 +546,7 @@ def main() -> None:
   dispatcher.add_handler(CommandHandler('updatetask', task_update))
   dispatcher.add_handler(CommandHandler('remark', add_remark))
 
-  dispatcher.add_handler(MessageHandler((Filters.group or Filters.text), prompts))
+  dispatcher.add_handler(MessageHandler((Filters.chat_type.groups or Filters.text), prompts))
 
   dispatcher.add_handler(CallbackQueryHandler(queryHandler))
 
