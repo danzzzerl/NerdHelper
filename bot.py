@@ -546,7 +546,7 @@ def main() -> None:
   dispatcher.add_handler(CommandHandler('updatetask', task_update))
   dispatcher.add_handler(CommandHandler('remark', add_remark))
 
-  dispatcher.add_handler(MessageHandler((Filters.chat_type.groups or Filters.text), prompts))
+  dispatcher.add_handler(MessageHandler(Filters.chat_type, prompts))
 
   dispatcher.add_handler(CallbackQueryHandler(queryHandler))
 
