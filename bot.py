@@ -316,6 +316,7 @@ def add_remark(update: Update, context:CallbackContext):
 
 def addremark(update: Update, context: CallbackContext):
   chatid = update.message.chat.id
+  print(chatid)
   text = update.message.text
   text_arr = text.split(' ')
 
@@ -327,10 +328,11 @@ def addremark(update: Update, context: CallbackContext):
   boolean_dictionary[chatid] = True
   global remark
   remark = f'{remarks_str}'
+  print('works till here 1')
 
   data = {'remarks': f'    - {remarks_str}'}
   db.child('tasklist').child(f'{chatid}').child(remarkskey).update(data)
-
+  print('works till here 2')
   return show_list(update, context)
 
 
